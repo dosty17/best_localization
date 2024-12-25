@@ -135,6 +135,22 @@ Access pluralized translations dynamically:
 ```dart
 Text(localizer.translate('items', args: {'count': '2'})); // Output: 2 دانە
 ```
+#### 5. Set Keys to Languages Other Than English
+You can define your translation keys in languages other than English. For example:
+```dart
+final translations = {
+  'en': {
+    'سڵاو': 'Hello, {name}!',  // Translation for "سڵاو" in English
+    'بەخێربێن': 'Welcome',     // Translation for "بەخێربێن" in English
+  },
+  'ku': {
+    'سڵاو': 'سڵاو، {name}!',  // Translation for "سڵاو" in Kurdish
+    'بەخێربێن': 'بەخێربێیت',  // Translation for "بەخێربێن" in Kurdish
+  },
+  // Add more languages here...
+};
+
+```
 
 ## About the developer
 This package was developed by Dosty Pshtiwan, inspired by the flutter_kurdish_localization package created by Amin Samad. It includes Kurdish localization support for Flutter apps and builds upon their foundational work to provide a comprehensive localization solution.
