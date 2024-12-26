@@ -1,6 +1,6 @@
 name: best_localization
-description: "A lightweight and flexible localization package for Flutter, providing dynamic translations, interpolation, pluralization, and Kurdish-specific localization for Material and Cupertino widgets."
-version: 0.0.1
+description: "A Flutter localization package with dynamic translations and Kurdish support."
+version: 0.0.2
 homepage: https://github.com/dosty17/best_localization
 repository: https://github.com/dosty17/best_localization
 issue_tracker: https://github.com/dosty17/best_localization/issues

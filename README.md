@@ -27,7 +27,7 @@
 
 ### Installation
 
-To install best_localization package, run the following commands in your terminal:
+**1- Add best_localization** <br>To install best_localization package, run the following commands in your terminal:
 
 ```bash
 flutter pub add best_localization
@@ -39,6 +39,15 @@ or `best_localization` to your `pubspec.yaml`:
 dependencies:
   best_localization: ^1.0.0
 ```
+
+**2- Add flutter_localizations** <br> Add the flutter_localizations package to your pubspec.yaml file:
+```yaml
+dependencies:
+  flutter_localizations:
+    sdk: flutter
+```
+
+### Using the package
 
 #### 1. Initialize Localization
 Define your translations using Dart maps. Here's an example with Kurdish and English:
