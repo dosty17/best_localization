@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.2] - 2025-03-21
+### added
+- enhancement
+
 ## [0.0.2] - 2024-12-26
 ### added
 - add flutter_localizations installation
