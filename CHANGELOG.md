@@ -2,16 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.4] - 2025-06-05
+
+### upate
+
+- update intl to 0.20.2
+
+### fix issues
+
+- cupertino localization error
+
 ## [0.0.3] - 2025-03-21
+
 ### added
+
 - enhancement
 
 ## [0.0.2] - 2024-12-26
+
 ### added
+
 - add flutter_localizations installation
 
 ## [0.0.1] - 2024-12-25
+
 ### Added
+
 - Initial release of `best_localization` package.
 - Support for dynamic translations using Dart maps.
 - Interpolation for dynamic placeholders (e.g., `Hello, {name}!`).
@@ -22,7 +38,9 @@ All notable changes to this project will be documented in this file.
 - Comprehensive date and number formatting for Kurdish using `intl`.
 
 ### Fixed
+
 - N/A (First release)
 
 ### Changed
+
 - N/A (First release)
