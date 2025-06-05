@@ -1,3 +1,4 @@
+import 'package:best_localization/src/kurdish/kurdish_cupertino_localization_delegate.dart';
 import 'package:best_localization/src/kurdish/kurdish_material_localization_delegate.dart';
 import 'package:best_localization/src/kurdish/kurdish_widget_localization_delegate.dart';
 import 'package:flutter/cupertino.dart';
@@ -118,4 +119,5 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
 List<LocalizationsDelegate> get kurdishLocalizations => [
       KurdishMaterialLocalizations.delegate,
       KurdishWidgetLocalizations.delegate,
+      KurdishCupertinoLocalizations.delegate,
     ];
