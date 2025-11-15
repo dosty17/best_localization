@@ -138,8 +138,8 @@ flutter:
     - assets/translations/
 ```
 
-> 📚 **For detailed loader documentation**, see [Loader Guide](lib/src/loaders/README.md)
-> 📚 **For remote translations**, see [Remote Loader Guide](lib/src/loaders/README.md#5-http-loader-http_loaderdart-)
+> 📚 **For detailed loader documentation**, see [Loader Guide](https://github.com/dosty17/best_localization/blob/main/loader.md)
+> 📚 **For remote translations**, see [Remote Loader Guide](https://github.com/dosty17/best_localization/blob/main/loader.md#5-http-loader-http_loaderdart-)
 
 #### 2. Add Localization Delegates
 Update your MaterialApp or CupertinoApp to include the localization delegates:
@@ -324,8 +324,7 @@ context.tr('hello')       // Returns "سڵاو" (from Kurdish)
 context.tr('new_feature') // Returns "New Feature" (from fallback English)
 ```
 
-> 📚 **Learn more about Fallback Locale**: [Fallback Locale Guide](lib/src/loaders/FALLBACK.md)
-> 📚 **Learn more about Remote Translations**: [Remote Translations Examples](lib/src/loaders/REMOTE_FALLBACK_EXAMPLES.md#remote-translations-http-loader)
+> 📚 **Learn more about Fallback Locale**: [Fallback Locale Guide](https://github.com/dosty17/best_localization/blob/main/FALLBACK.md)
 
 #### 5. Remote Translations (NEW! 🎉)
 
@@ -349,7 +348,7 @@ BestLocalizationDelegate.fromLoader(
 - ✅ Custom cache duration
 - ✅ Works with authentication
 
-> 📚 **Learn more about Remote Translations**: [Remote Translations Guide](lib/src/loaders/README.md#5-http-loader-http_loaderdart-)
+> 📚 **Learn more about Remote Translations**: [Remote Translations Guide](https://github.com/dosty17/best_localization/blob/main/loader.md#5-http-loader-http_loaderdart-)
 
 #### 6. Pluralization
 Define keys for singular and plural forms in your translations:
@@ -391,8 +390,6 @@ final translations = {
 ## About the developer
 This package was developed by Dosty Pshtiwan, inspired by the flutter_kurdish_localization package created by Amin Samad. It includes Kurdish localization support for Flutter apps and builds upon their foundational work to provide a comprehensive localization solution.
 
-<br>
-<img src="https://visitcount.itsvg.in/api?id=dosty-best-localization&label=Visitors&color=12&icon=5&pretty=true" />
 <br>
 
 ## Links:

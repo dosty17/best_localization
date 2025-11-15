@@ -1,6 +1,6 @@
-# Translation Loaders
+# Translation Loaders Guide
 
-This folder contains various loaders for loading translations from different file formats.
+This folder contains various loaders for loading translations from different file formats and sources.
 
 ## Available Loaders
 
@@ -34,14 +34,19 @@ assets/translations/
 
 **Usage:**
 ```dart
-// Single file
+// Method 1: Using Loaders class (Recommended)
 BestLocalizationDelegate.fromLoader(
-  JsonAssetLoader(path: 'assets/translations/translations.json')
+  Loaders.json(path: 'assets/translations.json')
+)
+
+// Method 2: Using factory method
+BestLocalizationDelegate.fromJson(
+  JsonAssetLoader(path: 'assets/translations.json')
 )
 
 // Multiple files
 BestLocalizationDelegate.fromLoader(
-  JsonAssetLoader(
+  Loaders.json(
     path: 'assets/translations',
     supportedLocales: ['en', 'ku', 'ar'],
     useSingleFile: false,
@@ -71,15 +76,20 @@ ku,world,جیهان
 
 **Usage:**
 ```dart
-// Columns format
+// Method 1: Using Loaders class
 BestLocalizationDelegate.fromLoader(
-  CsvAssetLoader(path: 'assets/translations/translations.csv')
+  Loaders.csv(path: 'assets/translations.csv')
+)
+
+// Method 2: Using factory method
+BestLocalizationDelegate.fromCsv(
+  CsvAssetLoader(path: 'assets/translations.csv')
 )
 
 // Rows format
 BestLocalizationDelegate.fromLoader(
-  CsvAssetLoader(
-    path: 'assets/translations/translations.csv',
+  Loaders.csv(
+    path: 'assets/translations.csv',
     useColumnsFormat: false,
   )
 )
@@ -89,7 +99,7 @@ BestLocalizationDelegate.fromLoader(
 
 Load translations from YAML files.
 
-**Note:** Requires `yaml: ^3.1.2` package.
+**Note:** Requires `yaml: '>=3.0.0 <4.0.0'` package.
 
 #### Single File Format:
 ```yaml
@@ -119,14 +129,19 @@ user:
 
 **Usage:**
 ```dart
-// Single file
+// Method 1: Using Loaders class
 BestLocalizationDelegate.fromLoader(
-  YamlAssetLoader(path: 'assets/translations/translations.yaml')
+  Loaders.yaml(path: 'assets/translations.yaml')
+)
+
+// Method 2: Using factory method
+BestLocalizationDelegate.fromYaml(
+  YamlAssetLoader(path: 'assets/translations.yaml')
 )
 
 // Multiple files
 BestLocalizationDelegate.fromLoader(
-  YamlAssetLoader(
+  Loaders.yaml(
     path: 'assets/translations',
     supportedLocales: ['en', 'ku', 'ar'],
     useSingleFile: false,
@@ -145,7 +160,7 @@ becomes `{'user.name': 'Name'}`
 
 Load translations from XML files.
 
-**Note:** Requires `xml: ^6.5.0` package.
+**Note:** Requires `xml: '>=6.0.0 <7.0.0'` package.
 
 #### Custom Format (Single File):
 ```xml
@@ -174,14 +189,19 @@ Load translations from XML files.
 
 **Usage:**
 ```dart
-// Custom format (single file)
+// Method 1: Using Loaders class
 BestLocalizationDelegate.fromLoader(
-  XmlAssetLoader(path: 'assets/translations/translations.xml')
+  Loaders.xml(path: 'assets/translations.xml')
+)
+
+// Method 2: Using factory method
+BestLocalizationDelegate.fromXml(
+  XmlAssetLoader(path: 'assets/translations.xml')
 )
 
 // Android format (multiple files)
 BestLocalizationDelegate.fromLoader(
-  XmlAssetLoader(
+  Loaders.xml(
     path: 'assets/translations',
     supportedLocales: ['en', 'ku', 'ar'],
     useSingleFile: false,
@@ -189,6 +209,104 @@ BestLocalizationDelegate.fromLoader(
   )
 )
 ```
+
+### 5. HTTP Loader (`http_loader.dart`) 🆕
+
+Load translations from a remote HTTP endpoint with automatic caching.
+
+**Note:** Requires `http: '>=0.13.0 <2.0.0'` and `shared_preferences: '>=2.0.0 <3.0.0'` packages.
+
+#### Expected API Response Format:
+```json
+{
+  "en": {
+    "hello": "Hello",
+    "world": "World",
+    "welcome": "Welcome, {name}!"
+  },
+  "ku": {
+    "hello": "سڵاو",
+    "world": "جیهان",
+    "welcome": "بەخێربێی، {name}!"
+  }
+}
+```
+
+**Usage:**
+```dart
+// Method 1: Using Loaders class (Recommended)
+BestLocalizationDelegate.fromLoader(
+  Loaders.remote(
+    url: 'https://api.example.com/translations',
+    cacheEnabled: true,
+    cacheDuration: Duration(hours: 24),
+  ),
+  fallbackLocale: Locale('en'),
+)
+
+// Method 2: Using factory method
+BestLocalizationDelegate.fromHttp(
+  HttpLoader(
+    url: 'https://api.example.com/translations',
+    cacheEnabled: true,
+    cacheDuration: Duration(hours: 24),
+  )
+)
+
+// With authentication
+BestLocalizationDelegate.fromLoader(
+  Loaders.remote(
+    url: 'https://api.example.com/translations',
+    headers: {
+      'Authorization': 'Bearer YOUR_TOKEN',
+      'Accept': 'application/json',
+    },
+  )
+)
+
+// Disable caching (always fetch fresh)
+BestLocalizationDelegate.fromLoader(
+  Loaders.remote(
+    url: 'https://api.example.com/translations',
+    cacheEnabled: false,
+  )
+)
+
+// Custom cache duration
+BestLocalizationDelegate.fromLoader(
+  Loaders.remote(
+    url: 'https://api.example.com/translations',
+    cacheDuration: Duration(hours: 12),
+  )
+)
+```
+
+**Features:**
+- ✅ Automatic caching with `shared_preferences`
+- ✅ Configurable cache duration (default: 24 hours)
+- ✅ Custom HTTP headers support (for authentication)
+- ✅ Offline fallback using expired cache
+- ✅ Manual cache clearing
+- ✅ Works with any REST API endpoint
+- ✅ Update translations without app updates
+
+**Clear Cache:**
+```dart
+final loader = Loaders.remote(
+  url: 'https://api.example.com/translations',
+) as HttpLoader;
+
+await loader.clearCache();
+```
+
+**How it works:**
+1. First request: Fetches from API and caches locally
+2. Subsequent requests: Uses cache if valid (within cache duration)
+3. Cache expired: Fetches fresh data from API
+4. No internet + expired cache: Uses expired cache as fallback
+5. Manual clear: Force refresh from API on next load
+
+> 📚 **Learn more about Remote Translations**: [Remote Translations Guide](REMOTE_FALLBACK_EXAMPLES.md#remote-translations-http-loader)
 
 ## Creating Custom Loaders
 
@@ -217,6 +335,7 @@ BestLocalizationDelegate.fromLoader(MyCustomLoader())
 ```dart
 import 'package:flutter/material.dart';
 import 'package:best_localization/best_localization.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(MyApp());
@@ -237,24 +356,37 @@ class MyApp extends StatelessWidget {
       
       // Localization delegates
       localizationsDelegates: [
-        // Use JSON loader
-        BestLocalizationDelegate.fromLoader(
-          JsonAssetLoader(path: 'assets/translations/translations.json'),
+        // Choose one loader:
+        
+        // JSON
+        BestLocalizationDelegate.fromJson(
+          JsonAssetLoader(path: 'assets/translations.json'),
         ),
         
-        // Or use YAML loader
-        // BestLocalizationDelegate.fromLoader(
-        //   YamlAssetLoader(path: 'assets/translations/translations.yaml'),
+        // Or CSV
+        // BestLocalizationDelegate.fromCsv(
+        //   CsvAssetLoader(path: 'assets/translations.csv'),
         // ),
         
-        // Or use CSV loader
-        // BestLocalizationDelegate.fromLoader(
-        //   CsvAssetLoader(path: 'assets/translations/translations.csv'),
+        // Or YAML
+        // BestLocalizationDelegate.fromYaml(
+        //   YamlAssetLoader(path: 'assets/translations.yaml'),
         // ),
         
-        // Or use XML loader
+        // Or XML
+        // BestLocalizationDelegate.fromXml(
+        //   XmlAssetLoader(path: 'assets/translations.xml'),
+        // ),
+        
+        // Or Remote (NEW!)
+        // BestLocalizationDelegate.fromHttp(
+        //   HttpLoader(url: 'https://api.example.com/translations'),
+        // ),
+        
+        // Or using Loaders class
         // BestLocalizationDelegate.fromLoader(
-        //   XmlAssetLoader(path: 'assets/translations/translations.xml'),
+        //   Loaders.json(path: 'assets/translations.json'),
+        //   fallbackLocale: Locale('en'),
         // ),
         
         // Kurdish localizations
@@ -276,17 +408,17 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.translate('app_title')),
+        title: Text(context.tr('app_title')),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Using extension method
-            Text(context.translate('hello')),
+            Text(context.tr('hello')),
             
             // With arguments
-            Text(context.translate('welcome', args: {'name': 'John'})),
+            Text(context.tr('welcome', args: {'name': 'John'})),
             
             // Check language
             if (context.isKurdish)
@@ -294,7 +426,7 @@ class HomePage extends StatelessWidget {
             
             // Get text direction
             Text(
-              context.translate('some_text'),
+              context.tr('some_text'),
               textDirection: context.textDirection,
             ),
           ],
@@ -318,3 +450,21 @@ flutter:
     - assets/translations/en.json
     - assets/translations/ku.json
 ```
+
+## Available Factory Methods
+
+All loaders can be created using factory methods:
+
+1. **`BestLocalizationDelegate.fromMap()`** - Direct map
+2. **`BestLocalizationDelegate.fromJson()`** - JSON files
+3. **`BestLocalizationDelegate.fromCsv()`** - CSV files
+4. **`BestLocalizationDelegate.fromYaml()`** - YAML files
+5. **`BestLocalizationDelegate.fromXml()`** - XML files
+6. **`BestLocalizationDelegate.fromHttp()`** - Remote API
+7. **`BestLocalizationDelegate.fromLoader()`** - Generic loader (with Loaders class)
+
+## Learn More
+
+- **Fallback Locale**: See [FALLBACK.md](FALLBACK.md) for detailed examples and use cases
+- **Remote Translations**: See [REMOTE_FALLBACK_EXAMPLES.md](REMOTE_FALLBACK_EXAMPLES.md) for advanced remote loading examples
+- **Main Documentation**: See [README.md](../../../README.md)
