@@ -6,12 +6,14 @@
 
 <hr>
 
-**Best Localization** is a lightweight and flexible localization package for Flutter. It supports dynamic translations, interpolation, pluralization, and custom localization for the Kurdish language, including widgets like Material and Cupertino.
+**Best Localization** is a lightweight and flexible localization package for Flutter. It supports dynamic translations, interpolation, pluralization, remote translations, fallback locales, and custom localization for the Kurdish language, including widgets like Material and Cupertino.
 
 ## Features
 
 - **Dynamic Translations**: Translate text based on locale dynamically.
-- **Multiple File Format Support**: Load translations from JSON, CSV, YAML, or XML files.
+- **Multiple File Format Support (NEW! 🎉)**: Load translations from JSON, CSV, YAML, or XML files.
+- **Remote Translations (NEW! 🎉)**: Load translations from HTTP API with automatic caching.
+- **Fallback Locale (NEW! 🎉)**: Automatically fall back to a default language when translations are missing.
 - **Interpolation**: Insert dynamic values into translations (e.g., Hello, {name}!).
 - **Pluralization**: Handle plural forms for text based on numeric values.
 - **BuildContext Extensions**: Easy access to translations without boilerplate code.
@@ -23,10 +25,9 @@
   - Fully compatible with MaterialApp and CupertinoApp.
 - **Flexible Translation Loading**: 
   - Load from assets (JSON, CSV, YAML, XML)
+  - Load from remote API (HTTP)
   - Define translations directly in Dart maps
   - Create custom loaders for your specific needs
-
-## Usage
 
 ## Getting Started
 
@@ -38,11 +39,11 @@
 flutter pub add best_localization
 ```
 
-or `best_localization` to your `pubspec.yaml`:
+or add `best_localization` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  best_localization: ^1.0.0
+  best_localization: ^0.0.4
 ```
 
 **2- Add flutter_localizations** <br> Add the flutter_localizations package to your pubspec.yaml file:
@@ -74,7 +75,7 @@ final translations = {
 ```
 
 **Option B: From JSON File**
-```dart
+```json
 // Create assets/translations/translations.json
 {
   "en": {
@@ -120,12 +121,25 @@ ku:
 </translations>
 ```
 
+**Option F: From Remote API**
+```dart
+// Load from your server with automatic caching
+Loaders.remote(
+  url: 'https://api.example.com/translations',
+  cacheEnabled: true,
+  cacheDuration: Duration(hours: 24),
+)
+```
+
 **Don't forget to add assets to pubspec.yaml:**
 ```yaml
 flutter:
   assets:
     - assets/translations/
 ```
+
+> 📚 **For detailed loader documentation**, see [Loader Guide](lib/src/loaders/README.md)
+> 📚 **For remote translations**, see [Remote Loader Guide](lib/src/loaders/README.md#5-http-loader-http_loaderdart-)
 
 #### 2. Add Localization Delegates
 Update your MaterialApp or CupertinoApp to include the localization delegates:
@@ -143,29 +157,39 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       localizationsDelegates: [
-        // Choose one of the following loaders:
+        // Choose one of the following methods:
         
-        // Using a map directly
-        BestLocalizationDelegate.fromMap(translations),
-        
-        // Or using JSON loader
+        // Method 1: Using Loaders class (Recommended)
         BestLocalizationDelegate.fromLoader(
-          JsonAssetLoader(path: 'assets/translations/translations.json'),
+          Loaders.json(path: 'assets/translations.json'),
+          fallbackLocale: Locale('en'),
         ),
         
-        // Or using CSV loader
-        // BestLocalizationDelegate.fromLoader(
-        //   CsvAssetLoader(path: 'assets/translations/translations.csv'),
+        // Method 2: Using specific factory methods
+        // BestLocalizationDelegate.fromJson(
+        //   JsonAssetLoader(path: 'assets/translations.json'),
         // ),
         
-        // Or using YAML loader (requires yaml package)
-        // BestLocalizationDelegate.fromLoader(
-        //   YamlAssetLoader(path: 'assets/translations/translations.yaml'),
+        // BestLocalizationDelegate.fromCsv(
+        //   CsvAssetLoader(path: 'assets/translations.csv'),
         // ),
         
-        // Or using XML loader (requires xml package)
-        // BestLocalizationDelegate.fromLoader(
-        //   XmlAssetLoader(path: 'assets/translations/translations.xml'),
+        // BestLocalizationDelegate.fromYaml(
+        //   YamlAssetLoader(path: 'assets/translations.yaml'),
+        // ),
+        
+        // BestLocalizationDelegate.fromXml(
+        //   XmlAssetLoader(path: 'assets/translations.xml'),
+        // ),
+        
+        // BestLocalizationDelegate.fromHttp(
+        //   HttpLoader(url: 'https://api.example.com/translations'),
+        // ),
+        
+        // Method 3: Using a map directly
+        // BestLocalizationDelegate.fromMap(
+        //   translations,
+        //   fallbackLocale: Locale('en'),
         // ),
         
         // Kurdish localizations
@@ -179,7 +203,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: const [
         Locale('ku'), // Kurdish
         Locale('en'), // English
-        //more language...
+        Locale('ar'), // Arabic
       ],
       locale: Locale('ku'),
       home: MyHomePage(),
@@ -187,6 +211,15 @@ class MyApp extends StatelessWidget {
   }
 }
 ```
+
+**All available loader methods:**
+- `BestLocalizationDelegate.fromMap()` - Direct map
+- `BestLocalizationDelegate.fromJson()` - JSON files
+- `BestLocalizationDelegate.fromCsv()` - CSV files
+- `BestLocalizationDelegate.fromYaml()` - YAML files
+- `BestLocalizationDelegate.fromXml()` - XML files
+- `BestLocalizationDelegate.fromHttp()` - Remote API
+- `BestLocalizationDelegate.fromLoader()` - Generic loader (with Loaders class)
 
 
 #### 3. Access Translations
@@ -260,7 +293,65 @@ class MyHomePage extends StatelessWidget {
 - `context.isRTL` - Check if current language is RTL
 - `context.textDirection` - Get text direction
 
-#### 4. Pluralization
+#### 4. Fallback Locale (NEW! 🎉)
+
+Use fallback locale to automatically use a default language when a translation is missing:
+
+```dart
+BestLocalizationDelegate.fromLoader(
+  Loaders.json(path: 'assets/translations.json'),
+  fallbackLocale: Locale('en'), // Falls back to English
+)
+```
+
+**Example:**
+```json
+{
+  "en": {
+    "hello": "Hello",
+    "new_feature": "New Feature"
+  },
+  "ku": {
+    "hello": "سڵاو"
+    // "new_feature" is missing
+  }
+}
+```
+
+When Kurdish is selected:
+```dart
+context.tr('hello')       // Returns "سڵاو" (from Kurdish)
+context.tr('new_feature') // Returns "New Feature" (from fallback English)
+```
+
+> 📚 **Learn more about Fallback Locale**: [Fallback Locale Guide](lib/src/loaders/FALLBACK.md)
+> 📚 **Learn more about Remote Translations**: [Remote Translations Examples](lib/src/loaders/REMOTE_FALLBACK_EXAMPLES.md#remote-translations-http-loader)
+
+#### 5. Remote Translations (NEW! 🎉)
+
+Load translations from your server with automatic caching:
+
+```dart
+BestLocalizationDelegate.fromLoader(
+  Loaders.remote(
+    url: 'https://api.example.com/translations',
+    cacheEnabled: true,
+    cacheDuration: Duration(hours: 24),
+    headers: {'Authorization': 'Bearer token'},
+  ),
+  fallbackLocale: Locale('en'),
+)
+```
+
+**Benefits:**
+- ✅ Update translations without app updates
+- ✅ Automatic caching for offline support
+- ✅ Custom cache duration
+- ✅ Works with authentication
+
+> 📚 **Learn more about Remote Translations**: [Remote Translations Guide](lib/src/loaders/README.md#5-http-loader-http_loaderdart-)
+
+#### 6. Pluralization
 Define keys for singular and plural forms in your translations:
 
 ```dart
@@ -279,7 +370,8 @@ Access pluralized translations dynamically:
 ```dart
 Text(localizer.translate('items', args: {'count': '2'})); // Output: 2 دانە
 ```
-#### 5. Set Keys to Languages Other Than English
+
+#### 7. Set Keys to Languages Other Than English
 You can define your translation keys in languages other than English. For example:
 ```dart
 final translations = {
