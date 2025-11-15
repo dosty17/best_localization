@@ -11,15 +11,20 @@
 ## Features
 
 - **Dynamic Translations**: Translate text based on locale dynamically.
+- **Multiple File Format Support**: Load translations from JSON, CSV, YAML, or XML files.
 - **Interpolation**: Insert dynamic values into translations (e.g., Hello, {name}!).
 - **Pluralization**: Handle plural forms for text based on numeric values.
+- **BuildContext Extensions**: Easy access to translations without boilerplate code.
 - **Custom Localization for Kurdish**:
   - Supports Kurdish (ku) localization for Material and Cupertino widgets.
   - Includes custom date and number formatting.
-- Seamless Integration:
-  - Works with Flutter’s native Localizations system.
+- **Seamless Integration**:
+  - Works with Flutter's native Localizations system.
   - Fully compatible with MaterialApp and CupertinoApp.
-- No ARB Files: Manage translations directly in Dart maps, simplifying the workflow.
+- **Flexible Translation Loading**: 
+  - Load from assets (JSON, CSV, YAML, XML)
+  - Define translations directly in Dart maps
+  - Create custom loaders for your specific needs
 
 ## Usage
 
@@ -50,9 +55,10 @@ dependencies:
 ### Using the package
 
 #### 1. Initialize Localization
-Define your translations using Dart maps. Here's an example with Kurdish and English:
 
+You can load translations in multiple ways:
 
+**Option A: From a Map (Direct)**
 ```dart
 final translations = {
   'en': {
@@ -65,7 +71,60 @@ final translations = {
   },
   //more language...
 };
+```
 
+**Option B: From JSON File**
+```dart
+// Create assets/translations/translations.json
+{
+  "en": {
+    "hello": "Hello, {name}!",
+    "welcome": "Welcome"
+  },
+  "ku": {
+    "hello": "سڵاو، {name}!",
+    "welcome": "بەخێربێیت"
+  }
+}
+```
+
+**Option C: From CSV File**
+```csv
+key,en,ku
+hello,Hello,سڵاو
+welcome,Welcome,بەخێربێیت
+```
+
+**Option D: From YAML File**
+```yaml
+en:
+  hello: Hello, {name}!
+  welcome: Welcome
+ku:
+  hello: سڵاو، {name}!
+  welcome: بەخێربێیت
+```
+
+**Option E: From XML File**
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<translations>
+  <language code="en">
+    <string key="hello">Hello, {name}!</string>
+    <string key="welcome">Welcome</string>
+  </language>
+  <language code="ku">
+    <string key="hello">سڵاو، {name}!</string>
+    <string key="welcome">بەخێربێیت</string>
+  </language>
+</translations>
+```
+
+**Don't forget to add assets to pubspec.yaml:**
+```yaml
+flutter:
+  assets:
+    - assets/translations/
 ```
 
 #### 2. Add Localization Delegates
@@ -73,6 +132,7 @@ Update your MaterialApp or CupertinoApp to include the localization delegates:
 
 ```dart
 import 'package:best_localization/best_localization.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(MyApp());
@@ -83,8 +143,35 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       localizationsDelegates: [
-        BestLocalizationDelegate(translations: translations),
+        // Choose one of the following loaders:
+        
+        // Using a map directly
+        BestLocalizationDelegate.fromMap(translations),
+        
+        // Or using JSON loader
+        BestLocalizationDelegate.fromLoader(
+          JsonAssetLoader(path: 'assets/translations/translations.json'),
+        ),
+        
+        // Or using CSV loader
+        // BestLocalizationDelegate.fromLoader(
+        //   CsvAssetLoader(path: 'assets/translations/translations.csv'),
+        // ),
+        
+        // Or using YAML loader (requires yaml package)
+        // BestLocalizationDelegate.fromLoader(
+        //   YamlAssetLoader(path: 'assets/translations/translations.yaml'),
+        // ),
+        
+        // Or using XML loader (requires xml package)
+        // BestLocalizationDelegate.fromLoader(
+        //   XmlAssetLoader(path: 'assets/translations/translations.xml'),
+        // ),
+        
+        // Kurdish localizations
         ...kurdishLocalizations,
+        
+        // Default Flutter localizations
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -99,13 +186,50 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 ```
 
 
 #### 3. Access Translations
-Use the BestLocalization.of(context) method to access translations in your widgets:
+Use the BestLocalization.of(context) method or the convenient extension methods:
 
+**Option A: Using Extension Methods (Recommended)**
+```dart
+class MyHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        // Short and clean syntax
+        title: Text(context.tr('hello', args: {'name': 'John'})),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Translate text
+            Text(context.tr('welcome')),
+            
+            // Check current language
+            if (context.isKurdish) 
+              Text('Kurdish language detected!'),
+            
+            // Get text direction automatically
+            Text(
+              context.tr('some_text'),
+              textDirection: context.textDirection,
+            ),
+            
+            // Access current language code
+            Text('Current language: ${context.languageCode}'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+**Option B: Using Traditional Method**
 ```dart
 class MyHomePage extends StatelessWidget {
   @override
@@ -122,8 +246,19 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
-
 ```
+
+**Available Extension Methods:**
+- `context.tr('key')` - Translate a key
+- `context.tr('key', args: {...})` - Translate with arguments
+- `context.localization` - Get BestLocalization instance
+- `context.currentLocale` - Get current locale
+- `context.languageCode` - Get language code ('en', 'ku', etc.)
+- `context.isKurdish` - Check if current language is Kurdish
+- `context.isArabic` - Check if current language is Arabic
+- `context.isEnglish` - Check if current language is English
+- `context.isRTL` - Check if current language is RTL
+- `context.textDirection` - Get text direction
 
 #### 4. Pluralization
 Define keys for singular and plural forms in your translations:

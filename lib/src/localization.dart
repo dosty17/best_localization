@@ -1,6 +1,8 @@
+import 'package:best_localization/best_localization.dart';
 import 'package:best_localization/src/kurdish/kurdish_cupertino_localization_delegate.dart';
 import 'package:best_localization/src/kurdish/kurdish_material_localization_delegate.dart';
 import 'package:best_localization/src/kurdish/kurdish_widget_localization_delegate.dart';
+import 'package:best_localization/src/loaders/translation_loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -75,12 +77,98 @@ class BestLocalization {
 /// the application's current locale.
 class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
   /// A map of translations for all supported languages.
-  final Map<String, Map<String, String>> translations;
+  final Map<String, Map<String, String>>? translations;
+
+  /// A translation loader to load translations dynamically.
+  final TranslationLoader? loader;
 
   /// Creates an instance of [BestLocalizationDelegate].
   ///
+  /// Either [translations] or [loader] must be provided.
+  ///
   /// [translations]: A map containing all translations for each language.
-  BestLocalizationDelegate({required this.translations});
+  /// [loader]: A translation loader to load translations from files.
+  BestLocalizationDelegate({this.translations, this.loader})
+      : assert(
+          translations != null || loader != null,
+          'Either translations or loader must be provided',
+        );
+
+  /// Creates a delegate from a translation loader.
+  ///
+  /// Example:
+  /// ```dart
+  /// BestLocalizationDelegate.fromLoader(
+  ///   JsonAssetLoader(path: 'assets/translations.json'),
+  /// )
+  /// ```
+  factory BestLocalizationDelegate.fromLoader(TranslationLoader loader) {
+    return BestLocalizationDelegate(loader: loader);
+  }
+
+  /// Creates a delegate from a CSV loader.
+  ///
+  /// Example:
+  /// ```dart
+  /// BestLocalizationDelegate.fromCsv(
+  ///  CsvAssetLoader(path: 'assets/translations.csv'),
+  /// )
+  /// ```
+  factory BestLocalizationDelegate.fromCsv(CsvAssetLoader loader) {
+    return BestLocalizationDelegate(loader: loader);
+  }
+
+  /// Creates a delegate from a JSON loader.
+  ///
+  /// Example:
+  /// ```dart
+  /// BestLocalizationDelegate.fromJson(
+  ///  JsonAssetLoader(path: 'assets/translations.json'),
+  /// )
+  /// ```
+  factory BestLocalizationDelegate.fromJson(JsonAssetLoader loader) {
+    return BestLocalizationDelegate(loader: loader);
+  }
+
+  /// Creates a delegate from an XML loader.
+  ///
+  /// Example:
+  /// ```dart
+  /// BestLocalizationDelegate.fromXml(
+  ///  XmlAssetLoader(path: 'assets/translations.xml'),
+  /// )
+  /// ```
+  factory BestLocalizationDelegate.fromXml(XmlAssetLoader loader) {
+    return BestLocalizationDelegate(loader: loader);
+  }
+
+  /// Creates a delegate from a YAML loader.
+  ///
+  /// Example:
+  /// ```dart
+  /// BestLocalizationDelegate.fromYaml(
+  ///  YamlAssetLoader(path: 'assets/translations.yaml'),
+  /// )
+  /// ```
+  factory BestLocalizationDelegate.fromYaml(YamlAssetLoader loader) {
+    return BestLocalizationDelegate(loader: loader);
+  }
+
+  /// Creates a delegate from a map of translations.
+  ///
+  /// Example:
+  /// ```dart
+  /// BestLocalizationDelegate.fromMap({
+  ///   'en': {'hello': 'Hello'},
+  ///   'ku': {'hello': 'سڵاو'},
+  /// })
+  /// ```
+  factory BestLocalizationDelegate.fromMap(
+      Map<String, Map<String, String>> translations) {
+    return BestLocalizationDelegate(translations: translations);
+  }
+
+  Map<String, Map<String, String>>? _loadedTranslations;
 
   /// Checks if the given [locale] is supported by this delegate.
   ///
@@ -91,7 +179,12 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
   /// - `false` otherwise.
   @override
   bool isSupported(Locale locale) {
-    return translations.containsKey(locale.languageCode);
+    if (translations != null) {
+      return translations!.containsKey(locale.languageCode);
+    }
+    // When using loader, we assume all locales are supported
+    // The actual check will be done during load
+    return true;
   }
 
   /// Loads the [BestLocalization] instance for the given [locale].
@@ -102,7 +195,12 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
   /// - A [Future] that resolves to a [BestLocalization] instance.
   @override
   Future<BestLocalization> load(Locale locale) async {
-    return BestLocalization(locale, translations);
+    if (loader != null && _loadedTranslations == null) {
+      _loadedTranslations = await loader!.load();
+    }
+
+    final translationsMap = _loadedTranslations ?? translations!;
+    return BestLocalization(locale, translationsMap);
   }
 
   /// Indicates whether this delegate should reload when a new delegate is provided.
