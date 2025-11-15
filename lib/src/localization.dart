@@ -25,11 +25,19 @@ class BestLocalization {
   /// ```
   final Map<String, Map<String, String>> translations;
 
+  /// The fallback locale to use when a translation is missing.
+  final Locale? fallbackLocale;
+
   /// Creates an instance of [BestLocalization].
   ///
   /// [locale]: The current locale of the application.
   /// [translations]: A map of all translations for each language.
-  BestLocalization(this.locale, this.translations);
+  /// [fallbackLocale]: The locale to use when a translation is missing.
+  BestLocalization(
+    this.locale,
+    this.translations, {
+    this.fallbackLocale,
+  });
 
   /// Translates a given [key] to the string corresponding to the current [locale].
   ///
@@ -38,24 +46,33 @@ class BestLocalization {
   ///
   /// Returns:
   /// - The translated string if the [key] exists in the current locale.
-  /// - `[$key]` if the [key] is missing from the current locale's translations.
+  /// - The translation from fallbackLocale if the key is missing in current locale.
+  /// - `[$key]` if the [key] is missing from both current and fallback locales.
   ///
   /// [locale]: Optional locale to override the current locale for this translation.
   String translate(String key, {Map<String, String>? args, Locale? locale}) {
     // Get the current language code (e.g., 'en', 'ku').
     final languageCode = locale?.languageCode ?? this.locale.languageCode;
 
-    // Fetch the translation for the given key or return the fallback `[$key]`.
-    String translation = translations[languageCode]?[key] ?? '[$key]';
+    // Try to get translation from current locale
+    String? translation = translations[languageCode]?[key];
+
+    // If not found, try fallback locale
+    if (translation == null && fallbackLocale != null) {
+      translation = translations[fallbackLocale!.languageCode]?[key];
+    }
+
+    // If still not found, return key in brackets
+    translation ??= '[$key]';
 
     // Replace placeholders with corresponding values if arguments are provided.
     if (args != null) {
       args.forEach((placeholder, value) {
-        translation = translation.replaceAll('{$placeholder}', value);
+        translation = translation!.replaceAll('{$placeholder}', value);
       });
     }
 
-    return translation;
+    return translation!;
   }
 
   /// Provides access to the [BestLocalization] instance from the widget tree.
@@ -82,14 +99,23 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
   /// A translation loader to load translations dynamically.
   final TranslationLoader? loader;
 
+  /// The fallback locale to use when a translation is missing.
+  ///
+  /// Example: `Locale('en')`
+  final Locale? fallbackLocale;
+
   /// Creates an instance of [BestLocalizationDelegate].
   ///
   /// Either [translations] or [loader] must be provided.
   ///
   /// [translations]: A map containing all translations for each language.
   /// [loader]: A translation loader to load translations from files.
-  BestLocalizationDelegate({this.translations, this.loader})
-      : assert(
+  /// [fallbackLocale]: The locale to use when a translation is missing.
+  BestLocalizationDelegate({
+    this.translations,
+    this.loader,
+    this.fallbackLocale,
+  }) : assert(
           translations != null || loader != null,
           'Either translations or loader must be provided',
         );
@@ -99,11 +125,18 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
   /// Example:
   /// ```dart
   /// BestLocalizationDelegate.fromLoader(
-  ///   JsonAssetLoader(path: 'assets/translations.json'),
+  ///   Loaders.json(path: 'assets/translations.json'),
+  ///   fallbackLocale: Locale('en'),
   /// )
   /// ```
-  factory BestLocalizationDelegate.fromLoader(TranslationLoader loader) {
-    return BestLocalizationDelegate(loader: loader);
+  factory BestLocalizationDelegate.fromLoader(
+    TranslationLoader loader, {
+    Locale? fallbackLocale,
+  }) {
+    return BestLocalizationDelegate(
+      loader: loader,
+      fallbackLocale: fallbackLocale,
+    );
   }
 
   /// Creates a delegate from a CSV loader.
@@ -154,18 +187,35 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
     return BestLocalizationDelegate(loader: loader);
   }
 
+  /// Creates a delegate from an HTTP loader.
+  ///
+  /// Example:
+  /// ```dart
+  /// BestLocalizationDelegate.fromHttp(
+  ///  HttpAssetLoader(url: 'https://api.example.com/translations'),
+  /// )
+  /// ```
+  factory BestLocalizationDelegate.fromHttp(HttpLoader loader) {
+    return BestLocalizationDelegate(loader: loader);
+  }
+
   /// Creates a delegate from a map of translations.
   ///
   /// Example:
   /// ```dart
-  /// BestLocalizationDelegate.fromMap({
-  ///   'en': {'hello': 'Hello'},
-  ///   'ku': {'hello': 'سڵاو'},
-  /// })
+  /// BestLocalizationDelegate.fromMap(
+  ///   {'en': {'hello': 'Hello'}, 'ku': {'hello': 'سڵاو'}},
+  ///   fallbackLocale: Locale('en'),
+  /// )
   /// ```
   factory BestLocalizationDelegate.fromMap(
-      Map<String, Map<String, String>> translations) {
-    return BestLocalizationDelegate(translations: translations);
+    Map<String, Map<String, String>> translations, {
+    Locale? fallbackLocale,
+  }) {
+    return BestLocalizationDelegate(
+      translations: translations,
+      fallbackLocale: fallbackLocale,
+    );
   }
 
   Map<String, Map<String, String>>? _loadedTranslations;
@@ -200,7 +250,11 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
     }
 
     final translationsMap = _loadedTranslations ?? translations!;
-    return BestLocalization(locale, translationsMap);
+    return BestLocalization(
+      locale,
+      translationsMap,
+      fallbackLocale: fallbackLocale,
+    );
   }
 
   /// Indicates whether this delegate should reload when a new delegate is provided.

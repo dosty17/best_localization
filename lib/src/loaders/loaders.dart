@@ -2,6 +2,7 @@ import 'json_loader.dart';
 import 'csv_loader.dart';
 import 'yaml_loader.dart';
 import 'xml_loader.dart';
+import 'http_loader.dart';
 import 'translation_loader.dart';
 
 /// Convenient loader factory class for loading translations from different formats.
@@ -217,5 +218,54 @@ class Loaders {
     String format = 'custom',
   }) {
     return XmlStringLoader(xmlString, format: format);
+  }
+
+  /// Creates an HTTP loader to fetch translations from a remote server.
+  ///
+  /// [url]: The endpoint URL to fetch translations from
+  /// [cacheEnabled]: Enable local caching (default: true)
+  /// [cacheDuration]: Cache validity duration (default: 24 hours)
+  /// [headers]: Custom HTTP headers
+  /// [cacheKey]: Custom cache key (optional)
+  ///
+  /// Example:
+  /// ```dart
+  /// // Basic remote loading with cache
+  /// Loaders.remote(
+  ///   url: 'https://api.example.com/translations',
+  /// )
+  ///
+  /// // With custom cache duration
+  /// Loaders.remote(
+  ///   url: 'https://api.example.com/translations',
+  ///   cacheDuration: Duration(hours: 12),
+  /// )
+  ///
+  /// // With authentication
+  /// Loaders.remote(
+  ///   url: 'https://api.example.com/translations',
+  ///   headers: {'Authorization': 'Bearer token'},
+  /// )
+  ///
+  /// // Disable caching
+  /// Loaders.remote(
+  ///   url: 'https://api.example.com/translations',
+  ///   cacheEnabled: false,
+  /// )
+  /// ```
+  static TranslationLoader remote({
+    required String url,
+    bool cacheEnabled = true,
+    Duration cacheDuration = const Duration(hours: 24),
+    Map<String, String>? headers,
+    String? cacheKey,
+  }) {
+    return HttpLoader(
+      url: url,
+      cacheEnabled: cacheEnabled,
+      cacheDuration: cacheDuration,
+      headers: headers,
+      cacheKey: cacheKey,
+    );
   }
 }
