@@ -8,3 +8,6 @@ export 'src/loaders/yaml_loader.dart';
 export 'src/loaders/xml_loader.dart';
 export 'src/loaders/http_loader.dart';
 export 'src/loaders/loaders.dart';
+
+// Export verification tools
+export 'src/verification/translation_verifier.dart';

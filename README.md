@@ -14,6 +14,7 @@
 - **Multiple File Format Support (NEW! 🎉)**: Load translations from JSON, CSV, YAML, or XML files.
 - **Remote Translations (NEW! 🎉)**: Load translations from HTTP API with automatic caching.
 - **Fallback Locale (NEW! 🎉)**: Automatically fall back to a default language when translations are missing.
+- **Translation Key Verification Tool (NEW! 🎉)**: Command-line tool to verify translation keys across locales.
 - **Interpolation**: Insert dynamic values into translations (e.g., Hello, {name}!).
 - **Pluralization**: Handle plural forms for text based on numeric values.
 - **BuildContext Extensions**: Easy access to translations without boilerplate code.
@@ -140,6 +141,7 @@ flutter:
 
 > 📚 **For detailed loader documentation**, see [Loader Guide](https://github.com/dosty17/best_localization/blob/main/loader.md)
 > 📚 **For remote translations**, see [Remote Loader Guide](https://github.com/dosty17/best_localization/blob/main/loader.md#5-http-loader-http_loaderdart-)
+> 📚 **For translation verification**, see [Verification Tool Guide](https://github.com/dosty17/best_localization/blob/main/VERIFICATION.md)
 
 #### 2. Add Localization Delegates
 Update your MaterialApp or CupertinoApp to include the localization delegates:
@@ -370,7 +372,102 @@ Access pluralized translations dynamically:
 Text(localizer.translate('items', args: {'count': '2'})); // Output: 2 دانە
 ```
 
-#### 7. Set Keys to Languages Other Than English
+#### 7. Translation Key Verification Tool (NEW! 🎉)
+
+Verify your translation files to find missing keys, duplicate values, and inconsistencies across locales.
+
+**In Your Code:**
+```dart
+import 'package:best_localization/best_localization.dart';
+
+// Load your translations
+final translations = {
+  'en': await JsonAssetLoader(path: 'assets/translations/en.json').load(),
+  'ku': await JsonAssetLoader(path: 'assets/translations/ku.json').load(),
+  'ar': await JsonAssetLoader(path: 'assets/translations/ar.json').load(),
+};
+
+// Verify all locales
+final report = TranslationVerifier.verify(
+  translations: translations,
+  referenceLocale: 'en', // Optional: use English as reference
+);
+
+// Print report
+print(report.generateReport());
+
+// Get coverage percentage
+print('Kurdish coverage: ${report.getCoverage('ku')}%');
+
+// Export as JSON
+final jsonReport = report.toJson();
+```
+
+**Command-Line Tool:**
+```bash
+# Activate the package globally (one-time setup)
+flutter pub global activate best_localization
+
+# Verify all translations in a directory
+dart run best_localization:verify_translations verify assets/languages
+
+# Verify with specific reference locale
+dart run best_localization:verify_translations verify assets/languages --reference en
+
+# Compare two translation files
+dart run best_localization:verify_translations compare assets/languages/en.json assets/languages/ku.json
+
+# Find duplicate values (same translation for different keys)
+dart run best_localization:verify_translations duplicates assets/languages/en.json
+
+# Find similar keys (potential typos)
+dart run best_localization:verify_translations similar assets/languages/en.json --threshold 0.8
+
+# Output as JSON for CI/CD integration
+dart run best_localization:verify_translations verify assets/languages --json
+```
+
+**Verification Report Example:**
+```
+📋 Translation Verification Report
+══════════════════════════════════════════════════
+Reference Locale: en
+Total Keys: 150
+Locales: en, ku, ar
+══════════════════════════════════════════════════
+
+❌ Missing Keys:
+  ku: 5 missing
+    - new_feature
+    - settings.advanced
+    - error.network_timeout
+    
+⚠️  Empty Values:
+  ar: 2 empty
+    - placeholder_text
+    - coming_soon
+
+══════════════════════════════════════════════════
+Summary:
+  Missing: 5 keys
+  Extra: 0 keys
+  Empty: 2 keys
+```
+
+**Use Cases:**
+- ✅ **Pre-release verification**: Check translations before publishing
+- ✅ **CI/CD integration**: Add as automated test in your pipeline
+- ✅ **Translation audit**: Find missing/duplicate translations
+- ✅ **Quality assurance**: Ensure consistency across locales
+- ✅ **Typo detection**: Find similar keys that might be duplicates
+
+**Available Verification Methods:**
+- `TranslationVerifier.verify()` - Verify all locales against reference
+- `TranslationVerifier.compareLocales()` - Compare two specific locales
+- `TranslationVerifier.findDuplicateValues()` - Find duplicate translations
+- `TranslationVerifier.findSimilarKeys()` - Find similar key names (potential typos)
+
+#### 8. Set Keys to Languages Other Than English
 You can define your translation keys in languages other than English. For example:
 ```dart
 final translations = {

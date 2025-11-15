@@ -1,6 +1,44 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+
+## [1.0.3] - 2025-11-15
+
+### 🎉 New Features
+
+#### Added
+- **Translation Key Verification Tool** 🔍
+  - `TranslationVerifier` class for programmatic verification
+  - Command-line tool: `dart run best_localization:verify_translations`
+  - Verify all translations against a reference locale
+  - Compare two specific locales
+  - Find duplicate values (same translation for different keys)
+  - Find similar keys (potential typos using Levenshtein distance)
+  - Generate detailed reports in text or JSON format
+  - Calculate coverage percentage per locale
+  - CI/CD integration support with exit codes
+  - Pre-commit hook examples
+  - **Commands:**
+    - `verify <path>` - Verify all translation files
+    - `compare <file1> <file2>` - Compare two files
+    - `duplicates <file>` - Find duplicate values
+    - `similar <file>` - Find similar keys
+  - **Features:**
+    - Missing key detection
+    - Extra key detection
+    - Empty value detection
+    - Duplicate value detection
+    - Similar key detection (configurable threshold)
+    - JSON output for automation
+    - Reference locale selection
+
+#### Documentation
+- Added comprehensive [VERIFICATION.md](VERIFICATION.md) guide
+- Updated README.md with verification tool section
+- Added CI/CD integration examples
+- Added programmatic usage examples
+- Updated pubspec.yaml with executable entry
+
 ## [1.0.2] - 2025-11-15
 - Enhance readme.md
 - Some changes
