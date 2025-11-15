@@ -159,6 +159,34 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
   ///  JsonAssetLoader(path: 'assets/translations.json'),
   /// )
   /// ```
+  /// =====================================
+  /// Loads translations from JSON files.
+  ///
+  /// Supports two JSON formats:
+  ///
+  /// 1. Single file with all languages:
+  /// ```json
+  /// {
+  ///   "en": {
+  ///     "hello": "Hello",
+  ///     "world": "World"
+  ///   },
+  ///   "ku": {
+  ///     "hello": "سڵاو",
+  ///     "world": "جیهان"
+  ///   }
+  /// }
+  /// ```
+  ///
+  /// 2. Separate files per language:
+  /// ```json
+  /// // en.json
+  /// {
+  ///   "hello": "Hello",
+  ///   "world": "World"
+  /// }
+  /// ```
+
   factory BestLocalizationDelegate.fromJson(JsonAssetLoader loader) {
     return BestLocalizationDelegate(loader: loader);
   }

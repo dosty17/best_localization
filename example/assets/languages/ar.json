@@ -1,0 +1,8 @@
+{
+    "hello": "مرحبًا، {name}!",
+    "items.one": "عنصر واحد",
+    "items.other": "{count} عناصر",
+    "welcome.male": "مرحبًا، السيد {name}.",
+    "welcome.female": "مرحبًا، السيدة {name}.",
+    "welcome.neutral": "مرحبًا، {name}."
+}

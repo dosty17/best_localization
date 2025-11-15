@@ -22,41 +22,40 @@ class MyApp extends StatefulWidget {
 ///
 /// Handles the initialization of translations and localization settings.
 class _MyAppState extends State<MyApp> {
+  // ** if you use simple loader
+  final translations = {
+    'en': {
+      'hello': 'Hello, {name}!',
+      'items.one': 'One item',
+      'items.other': '{count} items',
+      'welcome': 'Welcome',
+      'greeting': 'Hello, {name}!',
+      'items.few': '{count} items',
+      'items.many': '{count} items',
+      'date_format': 'MM/dd/yyyy',
+      "welcome.male": "Welcome, Mr. {name}.",
+      "welcome.female": "Welcome, Ms. {name}.",
+      "welcome.neutral": "Welcome, {name}."
+    },
+    'ar': {
+      'hello': 'مرحبًا، {name}!',
+      'items.one': 'عنصر واحد',
+      'items.other': '{count} عناصر',
+      "welcome.male": "مرحبًا، السيد {name}.",
+      "welcome.female": "مرحبًا، السيدة {name}.",
+      "welcome.neutral": "مرحبًا، {name}."
+    },
+    'ku': {
+      'hello': 'سڵاو، {name}!',
+      'items.one': 'یەک شەربەت',
+      'items.other': '{count} شەربەتەکان',
+      "welcome.male": "سڵاو، بەڕێز {name}.",
+      "welcome.female": "سڵاو، خاتوون {name}.",
+      "welcome.neutral": "سڵاو، {name}."
+    },
+  };
   @override
   Widget build(BuildContext context) {
-    // Define translations for English, Arabic, and Kurdish.
-    final translations = {
-      'en': {
-        'hello': 'Hello, {name}!',
-        'items.one': 'One item',
-        'items.other': '{count} items',
-        'welcome': 'Welcome',
-        'greeting': 'Hello, {name}!',
-        'items.few': '{count} items',
-        'items.many': '{count} items',
-        'date_format': 'MM/dd/yyyy',
-        "welcome.male": "Welcome, Mr. {name}.",
-        "welcome.female": "Welcome, Ms. {name}.",
-        "welcome.neutral": "Welcome, {name}."
-      },
-      'ar': {
-        'hello': 'مرحبًا، {name}!',
-        'items.one': 'عنصر واحد',
-        'items.other': '{count} عناصر',
-        "welcome.male": "مرحبًا، السيد {name}.",
-        "welcome.female": "مرحبًا، السيدة {name}.",
-        "welcome.neutral": "مرحبًا، {name}."
-      },
-      'ku': {
-        'hello': 'سڵاو، {name}!',
-        'items.one': 'یەک شەربەت',
-        'items.other': '{count} شەربەتەکان',
-        "welcome.male": "سڵاو، بەڕێز {name}.",
-        "welcome.female": "سڵاو، خاتوون {name}.",
-        "welcome.neutral": "سڵاو، {name}."
-      },
-    };
-
     // Configure the MaterialApp with localization and theme settings.
     return MaterialApp(
       title: 'Flutter Demo', // Title of the app
@@ -67,8 +66,14 @@ class _MyAppState extends State<MyApp> {
       ),
       // Define localization delegates for handling translations.
       localizationsDelegates: [
-        BestLocalizationDelegate(
-            translations: translations), // Custom localization delegate.
+        BestLocalizationDelegate.fromJson(
+          JsonAssetLoader(
+              path: 'assets/languages',
+              useSingleFile: false,
+              supportedLocales: ['en', 'ku', 'ar']),
+        ),
+        // BestLocalizationDelegate(
+        //     translations: translations), // Custom localization delegate.
         ...kurdishLocalizations, // Kurdish-specific localization.
         GlobalMaterialLocalizations.delegate, // Material widget localization.
         GlobalCupertinoLocalizations.delegate, // Cupertino widget localization.
@@ -81,7 +86,7 @@ class _MyAppState extends State<MyApp> {
         Locale('ar'), // Arabic
       ],
       // Set the default locale to Kurdish.
-      locale: Locale('ku'),
+      locale: Locale('ar'),
       // Define the home screen of the app.
       home: MyHomePage(
         title: 'Flutter Demo Home Page',
