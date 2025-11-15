@@ -4,9 +4,9 @@ import 'package:best_localization/src/verification/translation_verifier.dart';
 
 /// Command-line tool for verifying translation files
 void main(List<String> args) async {
-  print('🔍 Best Localization - Translation Verifier');
-  print('═' * 50);
-  print('');
+  stdout.writeln('🔍 Best Localization - Translation Verifier');
+  stdout.writeln('═' * 50);
+  stdout.writeln('');
 
   if (args.isEmpty) {
     _printUsage();
@@ -33,13 +33,13 @@ void main(List<String> args) async {
         _printUsage();
         break;
       default:
-        print('❌ Unknown command: $command');
-        print('');
+        stdout.writeln('❌ Unknown command: $command');
+        stdout.writeln('');
         _printUsage();
         exit(1);
     }
   } catch (e) {
-    print('❌ Error: $e');
+    stdout.writeln('❌ Error: $e');
     exit(1);
   }
 }
@@ -47,9 +47,9 @@ void main(List<String> args) async {
 /// Verify translations across multiple locale files
 Future<void> _verifyCommand(List<String> args) async {
   if (args.length < 2) {
-    print('❌ Usage: verify <path> [--reference locale] [--json]');
-    print('   Example: verify assets/languages');
-    print('   Example: verify assets/languages --reference en');
+    stdout.writeln('❌ Usage: verify <path> [--reference locale] [--json]');
+    stdout.writeln('   Example: verify assets/languages');
+    stdout.writeln('   Example: verify assets/languages --reference en');
     exit(1);
   }
 
@@ -69,22 +69,22 @@ Future<void> _verifyCommand(List<String> args) async {
 
   final directory = Directory(path);
   if (!await directory.exists()) {
-    print('❌ Directory not found: $path');
+    stdout.writeln('❌ Directory not found: $path');
     exit(1);
   }
 
-  print('📂 Loading translation files from: $path');
-  print('');
+  stdout.writeln('📂 Loading translation files from: $path');
+  stdout.writeln('');
 
   final translations = await _loadTranslationsFromDirectory(directory);
 
   if (translations.isEmpty) {
-    print('❌ No translation files found');
+    stdout.writeln('❌ No translation files found');
     exit(1);
   }
 
-  print('✅ Loaded ${translations.length} locales');
-  print('');
+  stdout.writeln('✅ Loaded ${translations.length} locales');
+  stdout.writeln('');
 
   final report = TranslationVerifier.verify(
     translations: translations,
@@ -92,9 +92,9 @@ Future<void> _verifyCommand(List<String> args) async {
   );
 
   if (jsonOutput) {
-    print(JsonEncoder.withIndent('  ').convert(report.toJson()));
+    stdout.writeln(JsonEncoder.withIndent('  ').convert(report.toJson()));
   } else {
-    print(report.generateReport());
+    stdout.writeln(report.generateReport());
   }
 
   exit(report.hasIssues ? 1 : 0);
@@ -103,8 +103,9 @@ Future<void> _verifyCommand(List<String> args) async {
 /// Compare two specific locale files
 Future<void> _compareCommand(List<String> args) async {
   if (args.length < 3) {
-    print('❌ Usage: compare <file1> <file2>');
-    print('   Example: compare assets/languages/en.json assets/languages/ar.json');
+    stdout.writeln('❌ Usage: compare <file1> <file2>');
+    stdout.writeln(
+        '   Example: compare assets/languages/en.json assets/languages/ar.json');
     exit(1);
   }
 
@@ -115,22 +116,22 @@ Future<void> _compareCommand(List<String> args) async {
   final file2 = File(file2Path);
 
   if (!await file1.exists()) {
-    print('❌ File not found: $file1Path');
+    stdout.writeln('❌ File not found: $file1Path');
     exit(1);
   }
 
   if (!await file2.exists()) {
-    print('❌ File not found: $file2Path');
+    stdout.writeln('❌ File not found: $file2Path');
     exit(1);
   }
 
   final locale1 = _getLocaleFromPath(file1Path);
   final locale2 = _getLocaleFromPath(file2Path);
 
-  print('📂 Comparing:');
-  print('   $locale1: $file1Path');
-  print('   $locale2: $file2Path');
-  print('');
+  stdout.writeln('📂 Comparing:');
+  stdout.writeln('   $locale1: $file1Path');
+  stdout.writeln('   $locale2: $file2Path');
+  stdout.writeln('');
 
   final translations1 = await _loadTranslationFile(file1);
   final translations2 = await _loadTranslationFile(file2);
@@ -142,7 +143,7 @@ Future<void> _compareCommand(List<String> args) async {
     translations2: translations2,
   );
 
-  print(comparison.generateReport());
+  stdout.writeln(comparison.generateReport());
 
   final hasIssues = comparison.onlyInLocale1.isNotEmpty ||
       comparison.onlyInLocale2.isNotEmpty ||
@@ -154,8 +155,8 @@ Future<void> _compareCommand(List<String> args) async {
 /// Find duplicate values in a translation file
 Future<void> _duplicatesCommand(List<String> args) async {
   if (args.length < 2) {
-    print('❌ Usage: duplicates <file>');
-    print('   Example: duplicates assets/languages/en.json');
+    stdout.writeln('❌ Usage: duplicates <file>');
+    stdout.writeln('   Example: duplicates assets/languages/en.json');
     exit(1);
   }
 
@@ -163,32 +164,32 @@ Future<void> _duplicatesCommand(List<String> args) async {
   final file = File(filePath);
 
   if (!await file.exists()) {
-    print('❌ File not found: $filePath');
+    stdout.writeln('❌ File not found: $filePath');
     exit(1);
   }
 
   final locale = _getLocaleFromPath(filePath);
-  print('📂 Checking for duplicate values in: $locale');
-  print('');
+  stdout.writeln('📂 Checking for duplicate values in: $locale');
+  stdout.writeln('');
 
   final translations = await _loadTranslationFile(file);
   final duplicates = TranslationVerifier.findDuplicateValues(translations);
 
   if (duplicates.isEmpty) {
-    print('✅ No duplicate values found!');
+    stdout.writeln('✅ No duplicate values found!');
     exit(0);
   }
 
-  print('⚠️  Found ${duplicates.length} duplicate values:');
-  print('');
+  stdout.writeln('⚠️  Found ${duplicates.length} duplicate values:');
+  stdout.writeln('');
 
   for (final entry in duplicates.entries) {
-    print('Value: "${entry.key}"');
-    print('Keys:');
+    stdout.writeln('Value: "${entry.key}"');
+    stdout.writeln('Keys:');
     for (final key in entry.value) {
-      print('  - $key');
+      stdout.writeln('  - $key');
     }
-    print('');
+    stdout.writeln('');
   }
 
   exit(1);
@@ -197,9 +198,10 @@ Future<void> _duplicatesCommand(List<String> args) async {
 /// Find similar keys (potential typos) in a translation file
 Future<void> _similarCommand(List<String> args) async {
   if (args.length < 2) {
-    print('❌ Usage: similar <file> [--threshold 0.8]');
-    print('   Example: similar assets/languages/en.json');
-    print('   Example: similar assets/languages/en.json --threshold 0.9');
+    stdout.writeln('❌ Usage: similar <file> [--threshold 0.8]');
+    stdout.writeln('   Example: similar assets/languages/en.json');
+    stdout.writeln(
+        '   Example: similar assets/languages/en.json --threshold 0.9');
     exit(1);
   }
 
@@ -217,14 +219,14 @@ Future<void> _similarCommand(List<String> args) async {
   final file = File(filePath);
 
   if (!await file.exists()) {
-    print('❌ File not found: $filePath');
+    stdout.writeln('❌ File not found: $filePath');
     exit(1);
   }
 
   final locale = _getLocaleFromPath(filePath);
-  print('📂 Checking for similar keys in: $locale');
-  print('   Threshold: $threshold');
-  print('');
+  stdout.writeln('📂 Checking for similar keys in: $locale');
+  stdout.writeln('   Threshold: $threshold');
+  stdout.writeln('');
 
   final translations = await _loadTranslationFile(file);
   final similarGroups = TranslationVerifier.findSimilarKeys(
@@ -233,20 +235,20 @@ Future<void> _similarCommand(List<String> args) async {
   );
 
   if (similarGroups.isEmpty) {
-    print('✅ No similar keys found!');
+    stdout.writeln('✅ No similar keys found!');
     exit(0);
   }
 
-  print('⚠️  Found ${similarGroups.length} groups of similar keys:');
-  print('');
+  stdout.writeln('⚠️  Found ${similarGroups.length} groups of similar keys:');
+  stdout.writeln('');
 
   for (final group in similarGroups) {
-    print('Base: ${group.baseKey}');
-    print('Similar:');
+    stdout.writeln('Base: ${group.baseKey}');
+    stdout.writeln('Similar:');
     for (final key in group.similarKeys) {
-      print('  - $key');
+      stdout.writeln('  - $key');
     }
-    print('');
+    stdout.writeln('');
   }
 
   exit(1);
@@ -284,7 +286,7 @@ String _getLocaleFromPath(String path) {
 
 /// Print usage information
 void _printUsage() {
-  print('''
+  stdout.writeln('''
 Usage: dart run best_localization:verify_translations <command> [options]
 
 Commands:
