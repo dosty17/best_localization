@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'translation_loader.dart';
@@ -59,9 +58,17 @@ class HttpLoader extends TranslationLoader {
   /// [cacheDuration]: Cache validity duration (default: 24 hours)
   /// [headers]: Custom HTTP headers
   /// [cacheKey]: Custom cache key (default: 'best_localization_cache')
+  ///
+  /// What is cacheEnabled?
+  /// - If true, translations will be cached locally using SharedPreferences.
+  /// - If false, translations will be fetched from the remote server on each load.
+  ///
+  /// What is cacheDuration?
+  /// - The duration for which cached translations are considered valid.
+  /// - After this duration, the loader will attempt to refresh translations from the server.
   HttpLoader({
     required this.url,
-    this.cacheEnabled = true,
+    this.cacheEnabled = false,
     this.cacheDuration = const Duration(hours: 24),
     this.headers,
     String? cacheKey,
@@ -73,9 +80,12 @@ class HttpLoader extends TranslationLoader {
     if (cacheEnabled) {
       final cachedData = await _loadFromCache();
       if (cachedData != null) {
-        if (kDebugMode) {
-          print('BestLocalization: Loaded translations from cache');
+        // Check if cache is expired, refresh in background
+        if (await _isCacheExpired()) {
+          // Refresh cache in background without blocking
+          _refreshCache();
         }
+
         return cachedData;
       }
     }
@@ -89,29 +99,42 @@ class HttpLoader extends TranslationLoader {
         await _saveToCache(data);
       }
 
-      if (kDebugMode) {
-        print('BestLocalization: Loaded translations from remote');
-      }
-
       return data;
     } catch (e) {
-      if (kDebugMode) {
-        print('BestLocalization: Error loading from remote: $e');
-      }
-
       // Try to load from cache as fallback even if expired
       if (cacheEnabled) {
         final cachedData = await _loadFromCache(ignoreExpiration: true);
         if (cachedData != null) {
-          if (kDebugMode) {
-            print('BestLocalization: Using expired cache as fallback');
-          }
           return cachedData;
         }
       }
 
       rethrow;
     }
+  }
+
+  /// Checks if the cache has expired.
+  Future<bool> _isCacheExpired() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final cacheTime = prefs.getInt('${_cacheKey}_time');
+      if (cacheTime == null) return true;
+
+      final cacheDate = DateTime.fromMillisecondsSinceEpoch(cacheTime);
+      final now = DateTime.now();
+
+      return now.difference(cacheDate) > cacheDuration;
+    } catch (e) {
+      return true;
+    }
+  }
+
+  /// Refreshes the cache in the background.
+  Future<void> _refreshCache() async {
+    try {
+      final data = await _fetchFromRemote();
+      await _saveToCache(data);
+    } catch (_) {}
   }
 
   /// Fetches translations from the remote URL.
@@ -178,9 +201,6 @@ class HttpLoader extends TranslationLoader {
       final Map<String, dynamic> jsonMap = json.decode(cachedJson);
       return _parseTranslations(jsonMap);
     } catch (e) {
-      if (kDebugMode) {
-        print('BestLocalization: Error loading from cache: $e');
-      }
       return null;
     }
   }
@@ -194,11 +214,7 @@ class HttpLoader extends TranslationLoader {
       await prefs.setString(_cacheKey, jsonString);
       await prefs.setInt(
           '${_cacheKey}_time', DateTime.now().millisecondsSinceEpoch);
-    } catch (e) {
-      if (kDebugMode) {
-        print('BestLocalization: Error saving to cache: $e');
-      }
-    }
+    } catch (_) {}
   }
 
   /// Clears the cached translations.
@@ -209,10 +225,6 @@ class HttpLoader extends TranslationLoader {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_cacheKey);
       await prefs.remove('${_cacheKey}_time');
-    } catch (e) {
-      if (kDebugMode) {
-        print('BestLocalization: Error clearing cache: $e');
-      }
-    }
+    } catch (_) {}
   }
 }

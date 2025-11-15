@@ -52,6 +52,17 @@ class JsonAssetLoader extends TranslationLoader {
   /// [path]: Path to JSON file or folder
   /// [supportedLocales]: Required when [useSingleFile] is false
   /// [useSingleFile]: Whether to use single file format (default: true)
+  ///
+  /// What is useSingleFile?
+  /// - If true, translations are loaded from a single JSON file containing all languages.
+  /// - If false, translations are loaded from multiple JSON files, one per language.
+  ///
+  /// How use multiple files?
+  /// - Provide the [supportedLocales] list with language codes.
+  /// - The loader will look for files named `<languageCode>.json` in the specified [path].
+  ///
+  /// for more details, see the class documentation.
+  /// [more info](https://github.com/dosty17/best_localization/blob/main/loader.md#multiple-files-format)
   JsonAssetLoader({
     required this.path,
     this.supportedLocales,
