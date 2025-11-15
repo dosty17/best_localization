@@ -233,14 +233,14 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         // Short and clean syntax
-        title: Text(context.tr('hello', args: {'name': 'John'})),
+        title: Text(context.translate('hello', args: {'name': 'John'})),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Translate text
-            Text(context.tr('welcome')),
+            Text(context.translate('welcome')),
             
             // Check current language
             if (context.isKurdish) 
@@ -248,7 +248,7 @@ class MyHomePage extends StatelessWidget {
             
             // Get text direction automatically
             Text(
-              context.tr('some_text'),
+              context.translate('some_text'),
               textDirection: context.textDirection,
             ),
             
@@ -282,8 +282,8 @@ class MyHomePage extends StatelessWidget {
 ```
 
 **Available Extension Methods:**
-- `context.tr('key')` - Translate a key
-- `context.tr('key', args: {...})` - Translate with arguments
+- `context.translate('key')` - Translate a key
+- `context.translate('key', args: {...})` - Translate with arguments
 - `context.localization` - Get BestLocalization instance
 - `context.currentLocale` - Get current locale
 - `context.languageCode` - Get language code ('en', 'ku', etc.)
@@ -320,8 +320,8 @@ BestLocalizationDelegate.fromLoader(
 
 When Kurdish is selected:
 ```dart
-context.tr('hello')       // Returns "سڵاو" (from Kurdish)
-context.tr('new_feature') // Returns "New Feature" (from fallback English)
+context.translate('hello')       // Returns "سڵاو" (from Kurdish)
+context.translate('new_feature') // Returns "New Feature" (from fallback English)
 ```
 
 > 📚 **Learn more about Fallback Locale**: [Fallback Locale Guide](https://github.com/dosty17/best_localization/blob/main/FALLBACK.md)
