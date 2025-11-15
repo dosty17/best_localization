@@ -155,9 +155,7 @@ class XmlAssetLoader extends TranslationLoader {
             }
           }
         }
-      } catch (e) {
-        print('Error loading translations for $locale: $e');
-      }
+      } catch (_) {}
     }
 
     return translations;

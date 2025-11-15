@@ -100,9 +100,7 @@ class YamlAssetLoader extends TranslationLoader {
         if (yamlMap is Map) {
           translations[locale] = _flattenYamlMap(yamlMap);
         }
-      } catch (e) {
-        print('Error loading translations for $locale: $e');
-      }
+      } catch (_) {}
     }
 
     return translations;

@@ -117,9 +117,7 @@ class JsonAssetLoader extends TranslationLoader {
             (key, value) => MapEntry(key.toString(), value.toString()),
           ),
         );
-      } catch (e) {
-        print('Error loading translations for $locale: $e');
-      }
+      } catch (_) {}
     }
 
     return translations;
