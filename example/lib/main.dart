@@ -1,4 +1,5 @@
 import 'package:best_localization/best_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -117,9 +118,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // Access the localization instance to translate text.
-    final localizer = BestLocalization.of(context);
-
     return Scaffold(
       // AppBar with a title.
       appBar: AppBar(
@@ -132,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             // Display a localized greeting for a male user.
-            Text(localizer.translate(
+            Text(context.translate(
               'welcome.male',
               args: {
                 'name': 'Dosty'
@@ -148,6 +146,9 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            CupertinoExpansionTile(
+                title: Text('Cupertino Expansion Tile'),
+                child: Text('Cupertino Expansion Tile Example')),
           ],
         ),
       ),

@@ -37,9 +37,11 @@ class BestLocalization {
   /// Returns:
   /// - The translated string if the [key] exists in the current locale.
   /// - `[$key]` if the [key] is missing from the current locale's translations.
-  String translate(String key, {Map<String, String>? args}) {
+  ///
+  /// [locale]: Optional locale to override the current locale for this translation.
+  String translate(String key, {Map<String, String>? args, Locale? locale}) {
     // Get the current language code (e.g., 'en', 'ku').
-    final languageCode = locale.languageCode;
+    final languageCode = locale?.languageCode ?? this.locale.languageCode;
 
     // Fetch the translation for the given key or return the fallback `[$key]`.
     String translation = translations[languageCode]?[key] ?? '[$key]';
@@ -121,3 +123,44 @@ List<LocalizationsDelegate> get kurdishLocalizations => [
       KurdishWidgetLocalizations.delegate,
       KurdishCupertinoLocalizations.delegate,
     ];
+
+extension LocalizationExtension on BuildContext {
+  /// Get the BestLocalization instance from the current context
+  BestLocalization get localization => BestLocalization.of(this);
+
+  /// Translates a given [key] to the string corresponding to the current [locale].
+  ///
+  /// [key]: The translation key to look up.
+  /// [args]: Optional arguments to interpolate into the translated string (e.g., `{name}`).
+  ///
+  /// Returns:
+  /// - The translated string if the [key] exists in the current locale.
+  /// - `[$key]` if the [key] is missing from the current locale's translations.
+  ///
+  /// [locale]: Optional locale to override the current locale for this translation.
+  String translate(String key, {Map<String, String>? args, Locale? locale}) {
+    return BestLocalization.of(this).translate(key, args: args, locale: locale);
+  }
+
+  /// Get current locale
+  Locale get currentLocale => BestLocalization.of(this).locale;
+
+  /// Get current language code (e.g., 'en', 'ku', 'ar')
+  String get languageCode => BestLocalization.of(this).locale.languageCode;
+
+  /// Check if current language is Kurdish
+  bool get isKurdish => languageCode == 'ku';
+
+  /// Check if current language is Arabic
+  bool get isArabic => languageCode == 'ar';
+
+  /// Check if current language is English
+  bool get isEnglish => languageCode == 'en';
+
+  /// Check if current language is RTL (Right-to-Left)
+  bool get isRTL => languageCode == 'ar' || languageCode == 'ku';
+
+  /// Get text direction based on current language
+  TextDirection get textDirection =>
+      isRTL ? TextDirection.rtl : TextDirection.ltr;
+}
