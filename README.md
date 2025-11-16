@@ -44,7 +44,7 @@ or add `best_localization` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  best_localization: ^1.0.1
+  best_localization: ^1.2.1
 ```
 
 **2- Add flutter_localizations** <br> Add the flutter_localizations package to your pubspec.yaml file:
@@ -490,7 +490,6 @@ This package was developed by Dosty Pshtiwan, inspired by the flutter_kurdish_lo
 <br>
 
 ## Links:
-[documentattion](https://fersaz.com/flutter/best_localization)\
 [youtube](https://www.youtube.com/playlist?list=PLwY2YLEPF3yAeT3r_Pdak7DO0PQbvzN_g)\
 [facebook](https://www.facebook.com/dosty.pshtiwan18)
 
