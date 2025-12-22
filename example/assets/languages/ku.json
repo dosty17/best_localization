@@ -1,8 +1,16 @@
 {
     "hello": "سڵاو، {name}!",
-    "items.one": "یەک شەربەت",
-    "items.other": "{count} شەربەتەکان",
-    "welcome.male": "سڵاو، بەڕێز {name}.",
-    "welcome.female": "سڵاو، خاتوون {name}.",
-    "welcome.neutral": "سڵاو، {name}."
+      "items": {
+        "zero": "سفر شەربەت",
+        "one": "یەک شەربەت",
+        "two": "دوو شەربەت",
+        "few": "{} شەربەت",
+        "many": "{} شەربەت",
+        "other": "{} شەربەت"
+      },
+      "welcome": {
+        "male": "سڵاو، بەڕێز {name}.",
+        "female": "سڵاو، خاتوون {name}.",
+        "neutral": "سڵاو، {name}."
+      }
 }

@@ -23,35 +23,52 @@ class MyApp extends StatefulWidget {
 /// Handles the initialization of translations and localization settings.
 class _MyAppState extends State<MyApp> {
   // ** if you use simple loader
-  final translations = {
+  Map<String, Map<String, dynamic>> translations = {
     'en': {
       'hello': 'Hello, {name}!',
-      'items.one': 'One item',
-      'items.other': '{count} items',
-      'welcome': 'Welcome',
-      'greeting': 'Hello, {name}!',
-      'items.few': '{count} items',
-      'items.many': '{count} items',
-      'date_format': 'MM/dd/yyyy',
-      "welcome.male": "Welcome, Mr. {name}.",
-      "welcome.female": "Welcome, Ms. {name}.",
-      "welcome.neutral": "Welcome, {name}."
+      'items': {
+        'one': 'One item',
+        'two': 'Two items',
+        'few': '{} items',
+        'many': '{} items',
+        'other': '{} items',
+      },
+      "welcome": {
+        'male': "Welcome, Mr. {name}.",
+        'female': "Welcome, Ms. {name}.",
+        'neutral': "Welcome, {name}."
+      },
     },
     'ar': {
       'hello': 'مرحبًا، {name}!',
-      'items.one': 'عنصر واحد',
-      'items.other': '{count} عناصر',
-      "welcome.male": "مرحبًا، السيد {name}.",
-      "welcome.female": "مرحبًا، السيدة {name}.",
-      "welcome.neutral": "مرحبًا، {name}."
+      'items': {
+        'one': 'عنصر واحد',
+        'two': 'عنصران',
+        'few': '{} عناصر',
+        'many': '{} عنصرًا',
+        'other': '{} عنصر',
+      },
+      "welcome": {
+        'male': "مرحبًا، السيد {name}.",
+        'female': "مرحبًا، السيدة {name}.",
+        'neutral': "مرحبًا، {name}."
+      },
     },
     'ku': {
       'hello': 'سڵاو، {name}!',
-      'items.one': 'یەک شەربەت',
-      'items.other': '{count} شەربەتەکان',
-      "welcome.male": "سڵاو، بەڕێز {name}.",
-      "welcome.female": "سڵاو، خاتوون {name}.",
-      "welcome.neutral": "سڵاو، {name}."
+      'items': {
+        'zero': 'سفر شەربەت',
+        'one': 'یەک شەربەت',
+        'two': 'دوو شەربەت',
+        'few': '{} شەربەت',
+        'many': '{} شەربەت',
+        'other': '{} شەربەت',
+      },
+      "welcome": {
+        'male': "سڵاو، بەڕێز {name}.",
+        'female': "سڵاو، خاتوون {name}.",
+        'neutral': "سڵاو، {name}."
+      },
     },
   };
   @override
@@ -66,14 +83,14 @@ class _MyAppState extends State<MyApp> {
       ),
       // Define localization delegates for handling translations.
       localizationsDelegates: [
-        BestLocalizationDelegate.fromJson(
-          JsonAssetLoader(
-              path: 'assets/languages',
-              useSingleFile: false,
-              supportedLocales: ['en', 'ku', 'ar']),
-        ),
-        // BestLocalizationDelegate(
-        //     translations: translations), // Custom localization delegate.
+        // BestLocalizationDelegate.fromJson(
+        //   JsonAssetLoader(
+        //       path: 'assets/languages',
+        //       useSingleFile: false,
+        //       supportedLocales: ['en', 'ku', 'ar']),
+        // ),
+        BestLocalizationDelegate(
+            translations: translations), // Custom localization delegate.
         ...kurdishLocalizations, // Kurdish-specific localization.
         GlobalMaterialLocalizations.delegate, // Material widget localization.
         GlobalCupertinoLocalizations.delegate, // Cupertino widget localization.
@@ -86,7 +103,7 @@ class _MyAppState extends State<MyApp> {
         Locale('ar'), // Arabic
       ],
       // Set the default locale to Kurdish.
-      locale: Locale('ar'),
+      locale: Locale('ku'),
       // Define the home screen of the app.
       home: MyHomePage(
         title: 'Flutter Demo Home Page',
@@ -135,8 +152,12 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             // Display a localized greeting for a male user.
+            Text('items').plural(1),
+            Text('items').plural(2),
+            Text('welcome').tr(gender: 'male', args: {'name': 'Dosty'}),
+            Text('welcome').tr(gender: 'neutral', args: {'name': 'Dosty'}),
             Text(context.translate(
-              'welcome.male',
+              'hello',
               args: {
                 'name': 'Dosty'
               }, // Pass dynamic arguments for interpolation.

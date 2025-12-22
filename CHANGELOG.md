@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.0] - 2025-12-22
+### New Features
+- **Directly Translate throu Text method or String**
+- Text('hello').tr() or Text('hello').translate()
+- New way of gender and plural
+
+#### Fix
+- Issue of gender and plural fixed
+
+
 ## [1.2.1] - 2025-11-16
 
 ### 🎉 New Features

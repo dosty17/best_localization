@@ -1,13 +1,15 @@
 {
     "hello": "Hello, {name}!",
-    "items.one": "One item",
-    "items.other": "{count} items",
-    "welcome": "Welcome",
-    "greeting": "Hello, {name}!",
-    "items.few": "{count} items",
-    "items.many": "{count} items",
-    "date_format": "MM/dd/yyyy",
-    "welcome.male": "Welcome, Mr. {name}.",
-    "welcome.female": "Welcome, Ms. {name}.",
-    "welcome.neutral": "Welcome, {name}."
+      "items": {
+        "one": "One item",
+        "two": "Two items",
+        "few": "{} items",
+        "many": "{} items",
+        "other": "{} items"
+      },
+      "welcome": {
+        "male": "Welcome, Mr. {name}.",
+        "female": "Welcome, Ms. {name}.",
+        "neutral": "Welcome, {name}."
+      }
 }

@@ -11,12 +11,14 @@
 ## Features
 
 - **Dynamic Translations**: Translate text based on locale dynamically.
-- **Multiple File Format Support (NEW! 🎉)**: Load translations from JSON, CSV, YAML, or XML files.
-- **Remote Translations (NEW! 🎉)**: Load translations from HTTP API with automatic caching.
-- **Fallback Locale (NEW! 🎉)**: Automatically fall back to a default language when translations are missing.
-- **Translation Key Verification Tool (NEW! 🎉)**: Command-line tool to verify translation keys across locales.
+- **Easy Translation Extensions (NEW! 🎉)**: Use `.tr()` on both Strings and Text widgets without context!
+- **Pluralization Support (NEW! 🎉)**: Smart plural forms with language-specific rules (zero, one, two, few, many, other).
+- **Gender-Specific Translations (NEW! 🎉)**: Support for male, female, and other gender variations.
+- **Multiple File Format Support**: Load translations from JSON, CSV, YAML, or XML files.
+- **Remote Translations**: Load translations from HTTP API with automatic caching.
+- **Fallback Locale**: Automatically fall back to a default language when translations are missing.
+- **Translation Key Verification Tool**: Command-line tool to verify translation keys across locales.
 - **Interpolation**: Insert dynamic values into translations (e.g., Hello, {name}!).
-- **Pluralization**: Handle plural forms for text based on numeric values.
 - **BuildContext Extensions**: Easy access to translations without boilerplate code.
 - **Custom Localization for Kurdish**:
   - Supports Kurdish (ku) localization for Material and Cupertino widgets.
@@ -44,7 +46,7 @@ or add `best_localization` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  best_localization: ^1.2.1
+  best_localization: ^2.0.0
 ```
 
 **2- Add flutter_localizations** <br> Add the flutter_localizations package to your pubspec.yaml file:
@@ -286,6 +288,7 @@ class MyHomePage extends StatelessWidget {
 **Available Extension Methods:**
 - `context.translate('key')` - Translate a key
 - `context.translate('key', args: {...})` - Translate with arguments
+- `context.plural('key', count)` - Translate with plural form
 - `context.localization` - Get BestLocalization instance
 - `context.currentLocale` - Get current locale
 - `context.languageCode` - Get language code ('en', 'ku', etc.)
@@ -295,7 +298,198 @@ class MyHomePage extends StatelessWidget {
 - `context.isRTL` - Check if current language is RTL
 - `context.textDirection` - Get text direction
 
-#### 4. Fallback Locale (NEW! 🎉)
+#### 4. Easy Translation with .tr() (NEW! 🎉)
+
+Translate strings and Text widgets easily without passing context!
+
+**For Strings:**
+```dart
+// Simple translation - no context needed!
+print('hello'.tr());
+
+// With arguments
+print('welcome'.tr(args: {'name': 'John'}));
+
+// With gender
+print('greeting'.tr(gender: 'male'));
+
+// With custom locale
+print('hello'.tr(locale: Locale('en')));
+
+// With context (optional)
+print('hello'.tr(context: context));
+```
+
+**For Text Widgets:**
+```dart
+// Simple translation - no context needed!
+Text('hello').tr()
+
+// With arguments
+Text('welcome').tr(args: {'name': 'John'})
+
+// With gender
+Text('greeting').tr(gender: 'female')
+
+// Plural form
+Text('items').plural(5)
+
+// Plural with arguments
+Text('money').plural(10, args: {'name': 'Sarah'})
+
+// Using translate() alias
+Text('hello').translate()  // Same as .tr()
+```
+
+**Usage in Your Widget:**
+```dart
+class MyWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // Direct translation - clean and simple!
+        Text('welcome'.tr()),
+        
+        // With styling
+        Text('title').tr(args: {'name': 'User'}),
+        
+        // Plural form
+        Text('items').plural(itemCount),
+        
+        // Gender-specific
+        Text('greeting').tr(gender: userGender),
+      ],
+    );
+  }
+}
+```
+
+#### 5. Pluralization (NEW! 🎉)
+
+Handle plural forms with language-specific rules:
+
+**JSON Structure:**
+```json
+{
+  "day": {
+    "zero": "{} дней",
+    "one": "{} день",
+    "two": "{} дня",
+    "few": "{} дня",
+    "many": "{} дней",
+    "other": "{} дней"
+  },
+  "money": {
+    "zero": "You have no money",
+    "one": "You have {} dollar",
+    "many": "You have {} dollars",
+    "other": "You have {} dollars"
+  },
+  "money_named_args": {
+    "zero": "{name} has no money",
+    "one": "{name} has {} dollar",
+    "many": "{name} has {} dollars",
+    "other": "{name} has {} dollars"
+  }
+}
+```
+
+**Usage:**
+```dart
+// String plural
+'day'.plural(0)   // "0 дней"
+'day'.plural(1)   // "1 день"
+'day'.plural(5)   // "5 дней"
+
+// With named arguments
+'money_named_args'.plural(5, args: {'name': 'John'})  // "John has 5 dollars"
+'money_named_args'.plural(1, args: {'name': 'John'})  // "John has 1 dollar"
+'money_named_args'.plural(0, args: {'name': 'John'})  // "John has no money"
+
+// Text widget plural
+Text('day').plural(itemCount)
+Text('money_named_args').plural(balance, args: {'name': userName})
+
+// With context (optional)
+'day'.plural(5, context: context)
+```
+
+**Supported Plural Forms:**
+- `zero` - When count is 0
+- `one` - When count is 1
+- `two` - When count is 2
+- `few` - Language-specific (e.g., 2-4 in Russian)
+- `many` - Language-specific (e.g., 5+ in Russian)
+- `other` - Default fallback
+
+**Language-Specific Rules:**
+- **English**: one (1), other (2+)
+- **Russian/Ukrainian**: Complex rules for one/few/many
+- **Arabic**: Supports zero, one, two, few, many
+- **Polish**: Similar to Russian
+
+#### 6. Gender-Specific Translations (NEW! 🎉)
+
+Support for gender-specific text variations:
+
+**JSON Structure:**
+```json
+{
+  "greeting": {
+    "male": "Hi man ;) {}",
+    "female": "Hello girl :) {}",
+    "other": "Hello {}"
+  },
+  "welcome_user": {
+    "male": "Welcome Mr. {name}",
+    "female": "Welcome Ms. {name}",
+    "other": "Welcome {name}"
+  }
+}
+```
+
+**Usage:**
+```dart
+// String gender translation
+'greeting'.tr(gender: 'male')    // "Hi man ;) "
+'greeting'.tr(gender: 'female')  // "Hello girl :) "
+'greeting'.tr(gender: 'other')   // "Hello "
+
+// With arguments
+'welcome_user'.tr(gender: 'female', args: {'name': 'Sarah'})  // "Welcome Ms. Sarah"
+'welcome_user'.tr(gender: 'male', args: {'name': 'John'})     // "Welcome Mr. John"
+
+// Text widget gender translation
+Text('greeting').tr(gender: userGender)
+Text('welcome_user').tr(gender: userGender, args: {'name': userName})
+
+// With context (optional)
+'greeting'.tr(gender: 'male', context: context)
+```
+
+**Dynamic Gender Example:**
+```dart
+class UserProfile extends StatelessWidget {
+  final String userName;
+  final String userGender; // 'male', 'female', or 'other'
+  
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text('greeting').tr(gender: userGender),
+        Text('profile_title').tr(
+          gender: userGender,
+          args: {'name': userName},
+        ),
+      ],
+    );
+  }
+}
+```
+
+#### 7. Fallback Locale (NEW! 🎉)
 
 Use fallback locale to automatically use a default language when a translation is missing:
 
@@ -328,7 +522,7 @@ context.translate('new_feature') // Returns "New Feature" (from fallback English
 
 > 📚 **Learn more about Fallback Locale**: [Fallback Locale Guide](https://github.com/dosty17/best_localization/blob/main/FALLBACK.md)
 
-#### 5. Remote Translations (NEW! 🎉)
+#### 8. Remote Translations (NEW! 🎉)
 
 Load translations from your server with automatic caching:
 
@@ -352,27 +546,7 @@ BestLocalizationDelegate.fromLoader(
 
 > 📚 **Learn more about Remote Translations**: [Remote Translations Guide](https://github.com/dosty17/best_localization/blob/main/loader.md#5-http-loader-http_loaderdart-)
 
-#### 6. Pluralization
-Define keys for singular and plural forms in your translations:
-
-```dart
-final translations = {
-  'en': {
-    'items.one': 'One item',
-    'items.other': '{count} items',
-  },
-  'ku': {
-    'items.one': 'یەک دانە',
-    'items.other': '{count} دانە',
-  },
-};
-```
-Access pluralized translations dynamically:
-```dart
-Text(localizer.translate('items', args: {'count': '2'})); // Output: 2 دانە
-```
-
-#### 7. Translation Key Verification Tool (NEW! 🎉)
+#### 9. Translation Key Verification Tool (NEW! 🎉)
 
 Verify your translation files to find missing keys, duplicate values, and inconsistencies across locales.
 
@@ -467,7 +641,7 @@ Summary:
 - `TranslationVerifier.findDuplicateValues()` - Find duplicate translations
 - `TranslationVerifier.findSimilarKeys()` - Find similar key names (potential typos)
 
-#### 8. Set Keys to Languages Other Than English
+#### 10. Set Keys to Languages Other Than English
 You can define your translation keys in languages other than English. For example:
 ```dart
 final translations = {
