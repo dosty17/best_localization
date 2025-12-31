@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.1] - 2025-12-31
+#### Fix
+- Fix an issue with cupertino
+
 ## [2.0.0] - 2025-12-22
 ### New Features
 - **Directly Translate throu Text method or String**

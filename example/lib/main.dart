@@ -103,7 +103,9 @@ class _MyAppState extends State<MyApp> {
         Locale('ar'), // Arabic
       ],
       // Set the default locale to Kurdish.
-      locale: Locale('ku'),
+      locale: Locale(
+        'ku',
+      ),
       // Define the home screen of the app.
       home: MyHomePage(
         title: 'Flutter Demo Home Page',

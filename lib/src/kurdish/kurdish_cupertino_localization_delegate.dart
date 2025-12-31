@@ -318,10 +318,10 @@ class KurdishCupertinoLocalizations extends GlobalCupertinoLocalizations {
       KurdishCupertinoLocalizationsDelegate();
 
   @override
-  String get datePickerDateOrderString => "هەڵبژاردنی بەروار";
+  String get datePickerDateOrderString => "dmy";
 
   @override
-  String get datePickerDateTimeOrderString => "کات هەڵبژێرە";
+  String get datePickerDateTimeOrderString => "date_time_dayPeriod";
 
   @override
   String? get datePickerHourSemanticsLabelOther => "کاتژمێری هەڵبژاردنی بەروار";
