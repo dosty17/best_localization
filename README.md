@@ -46,7 +46,7 @@ or add `best_localization` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  best_localization: ^2.0.2
+  best_localization: ^2.0.3
 ```
 
 **2- Add flutter_localizations** <br> Add the flutter_localizations package to your pubspec.yaml file:

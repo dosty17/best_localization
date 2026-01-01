@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3] - 2026-1-1
+#### Fix
+- Fix an issue with cupertino
+
 ## [2.0.2] - 2025-12-31
 #### Fix
 - Fix an issue with cupertino

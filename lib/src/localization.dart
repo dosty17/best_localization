@@ -600,29 +600,59 @@ extension TextTranslationExtension on Text {
   /// [args]: Optional arguments to interpolate into the translated string
   /// [gender]: Optional gender for gender-specific translations ('male', 'female', 'other')
   /// [locale]: Optional locale to override the current locale
-  /// [context]: Optional BuildContext (uses static instance if not provided)
+  /// [context]: Optional BuildContext (automatically captured if not provided)
+  ///
+  /// **Note**: This method now automatically captures context for reactive locale changes.
+  /// When locale changes, the translation will update automatically.
   ///
   /// Example:
   /// ```dart
-  /// Text('hello').tr()
+  /// Text('hello').tr()  // Works with automatic locale changes!
   /// Text('welcome').tr(args: {'name': 'John'})
-  /// Text('gender').tr(gender: 'male') // "Hi man ;) "
-  /// Text('hello').tr(context: context) // with context
+  /// Text('gender').tr(gender: 'male')
   /// ```
-  Text tr(
+  Widget tr(
       {Map<String, String>? args,
       String? gender,
       Locale? locale,
       BuildContext? context}) {
-    final localization = context != null
-        ? BestLocalization.of(context)
-        : BestLocalization.instance;
+    // If no context provided, use Builder to capture context at build time
+    // This ensures the widget rebuilds when locale changes
+    if (context == null) {
+      return Builder(
+        builder: (BuildContext ctx) {
+          final localization = BestLocalization.of(ctx);
+          final translatedText = localization.translate(
+            data ?? '',
+            args: args,
+            gender: gender,
+            locale: locale,
+          );
 
-    if (localization == null) {
-      throw Exception('BestLocalization instance not found. '
-          'Make sure BestLocalizationDelegate is added to MaterialApp.localizationsDelegates');
+          return Text(
+            translatedText,
+            key: key,
+            style: style,
+            strutStyle: strutStyle,
+            textAlign: textAlign,
+            textDirection: textDirection,
+            locale: this.locale,
+            softWrap: softWrap,
+            overflow: overflow,
+            textScaler: textScaler,
+            maxLines: maxLines,
+            semanticsLabel: semanticsLabel,
+            textWidthBasis: textWidthBasis,
+            textHeightBehavior: textHeightBehavior,
+            selectionColor: selectionColor,
+            semanticsIdentifier: semanticsIdentifier,
+            textScaleFactor: textScaleFactor,
+          );
+        },
+      );
     }
 
+    final localization = BestLocalization.of(context);
     final translatedText = localization.translate(
       data ?? '',
       args: args,
@@ -653,19 +683,25 @@ extension TextTranslationExtension on Text {
 
   /// Creates a Text widget with translated content
   ///
+  /// **IMPORTANT**: For locale changes to work properly, you must either:
+  /// 1. Pass the `context` parameter, OR
+  /// 2. Use `context.translate()` instead
+  ///
   /// [args]: Optional arguments to interpolate into the translated string
   /// [gender]: Optional gender for gender-specific translations ('male', 'female', 'other')
   /// [locale]: Optional locale to override the current locale
-  /// [context]: Optional BuildContext (uses static instance if not provided)
+  /// [context]: BuildContext to enable reactive locale changes (RECOMMENDED)
   ///
   /// Example:
   /// ```dart
-  /// Text('hello').tr()
-  /// Text('welcome').tr(args: {'name': 'John'})
-  /// Text('gender').tr(gender: 'male') // "Hi man ;) "
-  /// Text('hello').tr(context: context) // with context
+  /// // Recommended: Pass context for reactive locale changes
+  /// Text('hello').translate(context: context)
+  /// Text('welcome').translate(context: context, args: {'name': 'John'})
+  ///
+  /// // Alternative: Use context extension (better approach)
+  /// Text(context.translate('hello'))
   /// ```
-  Text translate(
+  Widget translate(
       {Map<String, String>? args,
       String? gender,
       Locale? locale,
@@ -678,25 +714,56 @@ extension TextTranslationExtension on Text {
   /// [count]: The number to determine the plural form
   /// [args]: Optional arguments to interpolate into the translated string
   /// [locale]: Optional locale to override the current locale
-  /// [context]: Optional BuildContext (uses static instance if not provided)
+  /// [context]: Optional BuildContext (automatically captured if not provided)
+  ///
+  /// **Note**: This method now automatically captures context for reactive locale changes.
+  /// When locale changes, the translation will update automatically.
   ///
   /// Example:
   /// ```dart
-  /// Text('day').plural(0) // "0 дней"
-  /// Text('day').plural(1) // "1 день"
-  /// Text('money_named_args').plural(5, args: {'name': 'John'})
+  /// Text('items').plural(0)  // Works with automatic locale changes!
+  /// Text('items').plural(1)
+  /// Text('items').plural(5, args: {'name': 'John'})
   /// ```
-  Text plural(num count,
+  Widget plural(num count,
       {Map<String, String>? args, Locale? locale, BuildContext? context}) {
-    final localization = context != null
-        ? BestLocalization.of(context)
-        : BestLocalization.instance;
+    // If no context provided, use Builder to capture context at build time
+    // This ensures the widget rebuilds when locale changes
+    if (context == null) {
+      return Builder(
+        builder: (BuildContext ctx) {
+          final localization = BestLocalization.of(ctx);
+          final translatedText = localization.plural(
+            data ?? '',
+            count,
+            args: args,
+            locale: locale,
+          );
 
-    if (localization == null) {
-      throw Exception('BestLocalization instance not found. '
-          'Make sure BestLocalizationDelegate is added to MaterialApp.localizationsDelegates');
+          return Text(
+            translatedText,
+            key: key,
+            style: style,
+            strutStyle: strutStyle,
+            textAlign: textAlign,
+            textDirection: textDirection,
+            locale: this.locale,
+            softWrap: softWrap,
+            overflow: overflow,
+            textScaler: textScaler,
+            maxLines: maxLines,
+            semanticsLabel: semanticsLabel,
+            textWidthBasis: textWidthBasis,
+            textHeightBehavior: textHeightBehavior,
+            selectionColor: selectionColor,
+            semanticsIdentifier: semanticsIdentifier,
+            textScaleFactor: textScaleFactor,
+          );
+        },
+      );
     }
 
+    final localization = BestLocalization.of(context);
     final translatedText = localization.plural(
       data ?? '',
       count,
