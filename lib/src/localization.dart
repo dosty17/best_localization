@@ -646,7 +646,6 @@ extension TextTranslationExtension on Text {
             textHeightBehavior: textHeightBehavior,
             selectionColor: selectionColor,
             semanticsIdentifier: semanticsIdentifier,
-            textScaleFactor: textScaleFactor,
           );
         },
       );
@@ -677,7 +676,6 @@ extension TextTranslationExtension on Text {
       textHeightBehavior: textHeightBehavior,
       selectionColor: selectionColor,
       semanticsIdentifier: semanticsIdentifier,
-      textScaleFactor: textScaleFactor,
     );
   }
 
@@ -757,7 +755,6 @@ extension TextTranslationExtension on Text {
             textHeightBehavior: textHeightBehavior,
             selectionColor: selectionColor,
             semanticsIdentifier: semanticsIdentifier,
-            textScaleFactor: textScaleFactor,
           );
         },
       );
@@ -788,7 +785,6 @@ extension TextTranslationExtension on Text {
       textHeightBehavior: textHeightBehavior,
       selectionColor: selectionColor,
       semanticsIdentifier: semanticsIdentifier,
-      textScaleFactor: textScaleFactor,
     );
   }
 }
