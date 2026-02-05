@@ -49,7 +49,7 @@ class CsvAssetLoader extends TranslationLoader {
   });
 
   @override
-  Future<Map<String, Map<String, String>>> load() async {
+  Future<Map<String, Map<String, Object>>> load() async {
     final csvString = await rootBundle.loadString(path);
 
     if (useColumnsFormat) {
@@ -60,7 +60,7 @@ class CsvAssetLoader extends TranslationLoader {
   }
 
   /// Loads translations from columns format CSV.
-  Map<String, Map<String, String>> _loadColumnsFormat(String csvString) {
+  Map<String, Map<String, Object>> _loadColumnsFormat(String csvString) {
     final lines =
         csvString.split('\n').where((line) => line.trim().isNotEmpty).toList();
 
@@ -73,7 +73,7 @@ class CsvAssetLoader extends TranslationLoader {
     final languageCodes = header.sublist(1); // Skip 'key' column
 
     // Initialize translations map
-    final Map<String, Map<String, String>> translations = {};
+    final Map<String, Map<String, Object>> translations = {};
     for (final lang in languageCodes) {
       translations[lang] = {};
     }
@@ -98,11 +98,11 @@ class CsvAssetLoader extends TranslationLoader {
   }
 
   /// Loads translations from rows format CSV.
-  Map<String, Map<String, String>> _loadRowsFormat(String csvString) {
+  Map<String, Map<String, Object>> _loadRowsFormat(String csvString) {
     final lines =
         csvString.split('\n').where((line) => line.trim().isNotEmpty).toList();
 
-    final Map<String, Map<String, String>> translations = {};
+    final Map<String, Map<String, Object>> translations = {};
 
     for (final line in lines) {
       final values = _parseCsvLine(line);
@@ -169,7 +169,7 @@ class CsvStringLoader extends TranslationLoader {
   });
 
   @override
-  Future<Map<String, Map<String, String>>> load() async {
+  Future<Map<String, Map<String, Object>>> load() async {
     final loader = CsvAssetLoader(
       path: '', // Not used for string loader
       delimiter: delimiter,

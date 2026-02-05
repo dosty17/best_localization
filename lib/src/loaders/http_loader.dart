@@ -75,7 +75,7 @@ class HttpLoader extends TranslationLoader {
   }) : _cacheKey = cacheKey ?? 'best_localization_cache';
 
   @override
-  Future<Map<String, Map<String, String>>> load() async {
+  Future<Map<String, Map<String, Object>>> load() async {
     // Try to load from cache first
     if (cacheEnabled) {
       final cachedData = await _loadFromCache();
@@ -138,7 +138,7 @@ class HttpLoader extends TranslationLoader {
   }
 
   /// Fetches translations from the remote URL.
-  Future<Map<String, Map<String, String>>> _fetchFromRemote() async {
+  Future<Map<String, Map<String, Object>>> _fetchFromRemote() async {
     final response = await http.get(
       Uri.parse(url),
       headers: headers,
@@ -155,15 +155,15 @@ class HttpLoader extends TranslationLoader {
   }
 
   /// Parses JSON response into translations map.
-  Map<String, Map<String, String>> _parseTranslations(
+  Map<String, Map<String, Object>> _parseTranslations(
       Map<String, dynamic> jsonMap) {
-    final Map<String, Map<String, String>> translations = {};
+    final Map<String, Map<String, Object>> translations = {};
 
     jsonMap.forEach((languageCode, translationsMap) {
       if (translationsMap is Map) {
-        translations[languageCode] = Map<String, String>.from(
+        translations[languageCode] = Map<String, Object>.from(
           translationsMap.map(
-            (key, value) => MapEntry(key.toString(), value.toString()),
+            (key, value) => MapEntry(key.toString(), value),
           ),
         );
       }
@@ -173,7 +173,7 @@ class HttpLoader extends TranslationLoader {
   }
 
   /// Loads translations from local cache.
-  Future<Map<String, Map<String, String>>?> _loadFromCache({
+  Future<Map<String, Map<String, Object>>?> _loadFromCache({
     bool ignoreExpiration = false,
   }) async {
     try {
@@ -206,7 +206,7 @@ class HttpLoader extends TranslationLoader {
   }
 
   /// Saves translations to local cache.
-  Future<void> _saveToCache(Map<String, Map<String, String>> data) async {
+  Future<void> _saveToCache(Map<String, Map<String, Object>> data) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final jsonString = json.encode(data);

@@ -59,7 +59,7 @@ class YamlAssetLoader extends TranslationLoader {
         );
 
   @override
-  Future<Map<String, Map<String, String>>> load() async {
+  Future<Map<String, Map<String, Object>>> load() async {
     if (useSingleFile) {
       return _loadSingleFile();
     } else {
@@ -68,11 +68,11 @@ class YamlAssetLoader extends TranslationLoader {
   }
 
   /// Loads translations from a single YAML file.
-  Future<Map<String, Map<String, String>>> _loadSingleFile() async {
+  Future<Map<String, Map<String, Object>>> _loadSingleFile() async {
     final yamlString = await rootBundle.loadString(path);
     final yamlMap = loadYaml(yamlString);
 
-    final Map<String, Map<String, String>> translations = {};
+    final Map<String, Map<String, Object>> translations = {};
 
     if (yamlMap is Map) {
       yamlMap.forEach((languageCode, translationsMap) {
@@ -87,8 +87,8 @@ class YamlAssetLoader extends TranslationLoader {
   }
 
   /// Loads translations from multiple YAML files.
-  Future<Map<String, Map<String, String>>> _loadMultipleFiles() async {
-    final Map<String, Map<String, String>> translations = {};
+  Future<Map<String, Map<String, Object>>> _loadMultipleFiles() async {
+    final Map<String, Map<String, Object>> translations = {};
 
     for (final locale in supportedLocales!) {
       try {
@@ -143,10 +143,10 @@ class YamlStringLoader extends TranslationLoader {
   YamlStringLoader(this.yamlString);
 
   @override
-  Future<Map<String, Map<String, String>>> load() async {
+  Future<Map<String, Map<String, Object>>> load() async {
     final yamlMap = loadYaml(yamlString);
 
-    final Map<String, Map<String, String>> translations = {};
+    final Map<String, Map<String, Object>> translations = {};
 
     if (yamlMap is Map) {
       yamlMap.forEach((languageCode, translationsMap) {

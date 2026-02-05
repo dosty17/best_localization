@@ -15,5 +15,5 @@ abstract class TranslationLoader {
   ///   'ku': {'hello': 'سڵاو', 'world': 'جیهان'}
   /// }
   /// ```
-  Future<Map<String, Map<String, String>>> load();
+  Future<Map<String, Map<String, Object>>> load();
 }

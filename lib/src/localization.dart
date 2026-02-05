@@ -404,7 +404,7 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
   /// )
   /// ```
   factory BestLocalizationDelegate.fromMap(
-    Map<String, Map<String, String>> translations, {
+    Map<String, Map<String, Object>> translations, {
     Locale? fallbackLocale,
   }) {
     return BestLocalizationDelegate(
@@ -413,7 +413,7 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
     );
   }
 
-  Map<String, Map<String, String>>? _loadedTranslations;
+  Map<String, Map<String, Object>>? _loadedTranslations;
 
   /// Checks if the given [locale] is supported by this delegate.
   ///
@@ -547,6 +547,8 @@ extension StringTranslationExtension on String {
   /// 'gender'.tr(gender: 'male') // "Hi man ;) "
   /// 'hello'.tr(context: context) // with context
   /// ```
+  /// warning: If you do not pass the [context], the translation will not update
+  /// when the locale changes. It is recommended to always pass the [context]
   String tr(
       {Map<String, String>? args,
       String? gender,
