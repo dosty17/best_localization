@@ -2,6 +2,55 @@
 
 All notable changes to this project will be documented in this file.
 
+<<<<<<< HEAD
+
+## [3.0.0] - 2026-06-27
+
+### ⚠️ Breaking Changes
+
+- **Kurdish Locale Code Realignment**:
+  - Kurdish Sorani language code changed from `ku` to **`ckb`**.
+  - Kurdish Kurmanji is now officially supported using language code **`ku`**.
+    _Note: If your app previously used `ku` for Sorani, you must rename your translation files (e.g., `ku.json` to `ckb.json`) and update your app's supported locales list to prevent broken layouts or missing translations._
+
+### ✨ New Features
+
+- # **Official Kurdish Kurmanji (`ku`) Support**: Added complete localization support including Material and Cupertino widgets.
+
+## [2.0.4] - 2026-2-5
+
+### Breaking Changes
+
+- **Updated all loader type signatures** to support complex translation values
+  - Changed from `Map<String, Map<String, String>>` to `Map<String, Map<String, Object>>`
+  - Now supports pluralization, gender-specific translations, and nested structures
+  - Affects all loaders: JsonLoader, YamlLoader, XmlLoader, CsvLoader, HttpLoader
+  - Translation values can now be strings, maps (for plurals/gender), or other objects
+
+#### Fix
+
+- Fixed type compatibility issues with pluralization and gender-specific translations
+- All loaders now properly preserve complex translation structures instead of converting to strings
+
+## [2.0.3] - 2026-1-1
+
+#### Fix
+
+- Fix an issue with cupertino
+
+## [2.0.2] - 2025-12-31
+
+#### Fix
+
+- Fix an issue with cupertino
+
+## [2.0.1] - 2025-12-31
+
+#### Fix
+
+- Fix an issue with cupertino
+  > > > > > > > cff1ecbc7b2a2389e189b58d4cce8bac3ed11cf2
+
 ## [2.0.0] - 2025-12-22
 
 ### New Features
