@@ -2,21 +2,37 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.0] - 2026-06-27
+
+### ⚠️ Breaking Changes
+
+- **Kurdish Locale Code Realignment**:
+  - Kurdish Sorani language code changed from `ku` to **`ckb`**.
+  - Kurdish Kurmanji is now officially supported using language code **`ku`**.
+    _Note: If your app previously used `ku` for Sorani, you must rename your translation files (e.g., `ku.json` to `ckb.json`) and update your app's supported locales list to prevent broken layouts or missing translations._
+
+### ✨ New Features
+
+- **Official Kurdish Kurmanji (`ku`) Support**: Added complete localization support including Material and Cupertino widgets.
+
 ## [2.0.0] - 2025-12-22
+
 ### New Features
+
 - **Directly Translate throu Text method or String**
 - Text('hello').tr() or Text('hello').translate()
 - New way of gender and plural
 
 #### Fix
-- Issue of gender and plural fixed
 
+- Issue of gender and plural fixed
 
 ## [1.2.1] - 2025-11-16
 
 ### 🎉 New Features
 
 #### Added
+
 - **Translation Key Verification Tool** 🔍
   - `TranslationVerifier` class for programmatic verification
   - Command-line tool: `dart run best_localization:verify_translations`
@@ -43,6 +59,7 @@ All notable changes to this project will be documented in this file.
     - Reference locale selection
 
 #### Documentation
+
 - Added comprehensive [VERIFICATION.md](VERIFICATION.md) guide
 - Updated README.md with verification tool section
 - Added CI/CD integration examples
@@ -50,6 +67,7 @@ All notable changes to this project will be documented in this file.
 - Updated pubspec.yaml with executable entry
 
 ## [1.0.2] - 2025-11-15
+
 - Enhance readme.md
 - Some changes
 
@@ -58,6 +76,7 @@ All notable changes to this project will be documented in this file.
 ### 🎉 Major Release - New Features
 
 #### Added
+
 - **Multiple File Format Support** 🎉
   - JSON Loader: Load translations from JSON files (single or multiple files)
   - CSV Loader: Load translations from CSV files (columns or rows format)
@@ -110,14 +129,15 @@ All notable changes to this project will be documented in this file.
   - `context.textDirection` - Get text direction
 
 ### Changed
+
 - Updated package dependencies to use flexible version ranges
 - Enhanced Kurdish Cupertino localizations with missing properties
 - Improved code organization with separate loader files
 
 ### Fixed
+
 - Fixed missing implementations in `KurdishCupertinoLocalizations`
 - Resolved compatibility issues with different Flutter versions
-
 
 ## [0.0.4] - 2025-06-05
 

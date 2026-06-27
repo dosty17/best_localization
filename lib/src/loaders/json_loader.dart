@@ -73,7 +73,7 @@ class JsonAssetLoader extends TranslationLoader {
         );
 
   @override
-  Future<Map<String, Map<String, String>>> load() async {
+  Future<Map<String, Map<String, Object>>> load() async {
     if (useSingleFile) {
       return _loadSingleFile();
     } else {
@@ -82,17 +82,17 @@ class JsonAssetLoader extends TranslationLoader {
   }
 
   /// Loads translations from a single JSON file.
-  Future<Map<String, Map<String, String>>> _loadSingleFile() async {
+  Future<Map<String, Map<String, Object>>> _loadSingleFile() async {
     final jsonString = await rootBundle.loadString(path);
     final Map<String, dynamic> jsonMap = json.decode(jsonString);
 
-    final Map<String, Map<String, String>> translations = {};
+    final Map<String, Map<String, Object>> translations = {};
 
     jsonMap.forEach((languageCode, translationsMap) {
       if (translationsMap is Map) {
-        translations[languageCode] = Map<String, String>.from(
+        translations[languageCode] = Map<String, Object>.from(
           translationsMap.map(
-            (key, value) => MapEntry(key.toString(), value.toString()),
+            (key, value) => MapEntry(key.toString(), value),
           ),
         );
       }
@@ -102,8 +102,8 @@ class JsonAssetLoader extends TranslationLoader {
   }
 
   /// Loads translations from multiple JSON files.
-  Future<Map<String, Map<String, String>>> _loadMultipleFiles() async {
-    final Map<String, Map<String, String>> translations = {};
+  Future<Map<String, Map<String, Object>>> _loadMultipleFiles() async {
+    final Map<String, Map<String, Object>> translations = {};
 
     for (final locale in supportedLocales!) {
       try {
@@ -112,9 +112,9 @@ class JsonAssetLoader extends TranslationLoader {
         final jsonString = await rootBundle.loadString(filePath);
         final Map<String, dynamic> jsonMap = json.decode(jsonString);
 
-        translations[locale] = Map<String, String>.from(
+        translations[locale] = Map<String, Object>.from(
           jsonMap.map(
-            (key, value) => MapEntry(key.toString(), value.toString()),
+            (key, value) => MapEntry(key.toString(), value),
           ),
         );
       } catch (_) {}
@@ -132,16 +132,16 @@ class JsonStringLoader extends TranslationLoader {
   JsonStringLoader(this.jsonString);
 
   @override
-  Future<Map<String, Map<String, String>>> load() async {
+  Future<Map<String, Map<String, Object>>> load() async {
     final Map<String, dynamic> jsonMap = json.decode(jsonString);
 
-    final Map<String, Map<String, String>> translations = {};
+    final Map<String, Map<String, Object>> translations = {};
 
     jsonMap.forEach((languageCode, translationsMap) {
       if (translationsMap is Map) {
-        translations[languageCode] = Map<String, String>.from(
+        translations[languageCode] = Map<String, Object>.from(
           translationsMap.map(
-            (key, value) => MapEntry(key.toString(), value.toString()),
+            (key, value) => MapEntry(key.toString(), value),
           ),
         );
       }

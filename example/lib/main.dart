@@ -1,16 +1,222 @@
-import 'package:best_localization/best_localization.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:best_localization/best_localization.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_localizations/flutter_localizations.dart';
+
+// /// Entry point of the Flutter application.
+// void main() {
+//   runApp(const MyApp());
+// }
+
+// /// The root widget of the application.
+// ///
+// /// This widget sets up the localization delegates, supported locales, and theme.
+// class MyApp extends StatefulWidget {
+//   const MyApp({super.key});
+
+//   @override
+//   State<MyApp> createState() => _MyAppState();
+// }
+
+// /// State for the [MyApp] widget.
+// ///
+// /// Handles the initialization of translations and localization settings.
+// class _MyAppState extends State<MyApp> {
+//   // ** if you use simple loader
+//   Map<String, Map<String, dynamic>> translations = {
+//     'en': {
+//       'hello': 'Hello, {name}!',
+//       'items': {
+//         'one': 'One item',
+//         'two': 'Two items',
+//         'few': '{} items',
+//         'many': '{} items',
+//         'other': '{} items',
+//       },
+//       "welcome": {
+//         'male': "Welcome, Mr. {name}.",
+//         'female': "Welcome, Ms. {name}.",
+//         'neutral': "Welcome, {name}."
+//       },
+//     },
+//     'ar': {
+//       'hello': 'مرحبًا، {name}!',
+//       'items': {
+//         'one': 'عنصر واحد',
+//         'two': 'عنصران',
+//         'few': '{} عناصر',
+//         'many': '{} عنصرًا',
+//         'other': '{} عنصر',
+//       },
+//       "welcome": {
+//         'male': "مرحبًا، السيد {name}.",
+//         'female': "مرحبًا، السيدة {name}.",
+//         'neutral': "مرحبًا، {name}."
+//       },
+//     },
+//     'ku': {
+//       'hello': 'سڵاو، {name}!',
+//       'items': {
+//         'zero': 'سفر شەربەت',
+//         'one': 'یەک شەربەت',
+//         'two': 'دوو شەربەت',
+//         'few': '{} شەربەت',
+//         'many': '{} شەربەت',
+//         'other': '{} شەربەت',
+//       },
+//       "welcome": {
+//         'male': "سڵاو، بەڕێز {name}.",
+//         'female': "سڵاو، خاتوون {name}.",
+//         'neutral': "سڵاو، {name}."
+//       },
+//     },
+//     'ku_en': {
+//       'hello': 'slaw, {name}!',
+//       'items': {
+//         'zero': 'sfer şerbet',
+//         'one': 'yek şerbet',
+//         'two': 'du şerbet',
+//         'few': '{} şerbet',
+//         'many': '{} şerbet',
+//         'other': '{} şerbet',
+//       },
+//       "welcome": {
+//         'male': "sław, berêz {name}.",
+//         'female': "sław, xatûn {name}.",
+//         'neutral': "sław, {name}."
+//       },
+//     },
+//   };
+//   @override
+//   Widget build(BuildContext context) {
+//     // Configure the MaterialApp with localization and theme settings.
+//     return MaterialApp(
+//       title: 'Flutter Demo', // Title of the app
+//       theme: ThemeData(
+//         // Set the color scheme for the application.
+//         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+//         useMaterial3: true, // Enable Material 3 design.
+//       ),
+//       // Define localization delegates for handling translations.
+//       localizationsDelegates: [
+//         // BestLocalizationDelegate.fromJson(
+//         //   JsonAssetLoader(
+//         //       path: 'assets/languages',
+//         //       useSingleFile: false,
+//         //       supportedLocales: ['en', 'ku', 'ar']),
+//         // ),
+//         BestLocalizationDelegate(
+//             translations: translations), // Custom localization delegate.
+//         ...kurdishLocalizations, // Kurdish-specific localization.
+//         GlobalMaterialLocalizations.delegate, // Material widget localization.
+//         GlobalCupertinoLocalizations.delegate, // Cupertino widget localization.
+//         GlobalWidgetsLocalizations.delegate, // General widget localization.
+//       ],
+//       // Define the supported locales for the app.
+//       supportedLocales: const [
+//         Locale('ku'), // Kurdish
+//         Locale('en'), // English
+//         Locale('ar'), // Arabic
+//       ],
+//       // Set the default locale to Kurdish.
+//       locale: Locale(
+//         'ku',
+//       ),
+//       // Define the home screen of the app.
+//       home: MyHomePage(
+//         title: 'Flutter Demo Home Page',
+//       ),
+//     );
+//   }
+// }
+
+// /// The main screen of the app.
+// ///
+// /// Displays localized text and a counter.
+// class MyHomePage extends StatefulWidget {
+//   const MyHomePage({super.key, required this.title});
+
+//   /// The title of the screen, displayed in the app bar.
+//   final String title;
+
+//   @override
+//   State<MyHomePage> createState() => _MyHomePageState();
+// }
+
+// /// State for the [MyHomePage] widget.
+// ///
+// /// Manages the counter and displays localized text.
+// class _MyHomePageState extends State<MyHomePage> {
+//   int _counter = 0; // Counter value displayed on the screen.
+
+//   /// Increment the counter and refresh the UI.
+//   void _incrementCounter() {
+//     setState(() {
+//       _counter++;
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       // AppBar with a title.
+//       appBar: AppBar(
+//         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+//         title: Text(widget.title), // Display the title passed from MyHomePage.
+//       ),
+//       // Main body of the screen.
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: <Widget>[
+//             // Display a localized greeting for a male user.
+//             Text('items').plural(1),
+//             Text('items').plural(2),
+//             Text('welcome').tr(gender: 'male', args: {'name': 'Dosty'}),
+//             Text('welcome').tr(gender: 'neutral', args: {'name': 'Dosty'}),
+//             Text(context.translate(
+//               'hello',
+//               args: {
+//                 'name': 'Dosty'
+//               }, // Pass dynamic arguments for interpolation.
+//             )),
+//             SizedBox(height: 20), // Add spacing between widgets.
+//             // Display a static label.
+//             const Text(
+//               'You have pushed the button this many times:',
+//             ),
+//             // Display the counter value.
+//             Text(
+//               '$_counter',
+//               style: Theme.of(context).textTheme.headlineMedium,
+//             ),
+//             CupertinoExpansionTile(
+//                 title: Text('Cupertino Expansion Tile'),
+//                 child: Text('Cupertino Expansion Tile Example')),
+//           ],
+//         ),
+//       ),
+//       // Floating action button to increment the counter.
+//       floatingActionButton: FloatingActionButton(
+//         onPressed: _incrementCounter, // Increment counter when pressed.
+//         tooltip: 'Increment', // Tooltip displayed on hover.
+//         child: const Icon(Icons.add), // Icon for the button.
+//       ),
+//     );
+//   }
+// }
+
 import 'package:flutter/material.dart';
+import 'package:best_localization/best_localization.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-/// Entry point of the Flutter application.
+/// Example demonstrating Kurdish localization with two scripts:
+/// 1. Locale('ku') - Kurdish in Arabic script (Sorani)
+/// 2. Locale('ku', 'en') - Kurdish in Latin script (Kurmanji)
 void main() {
   runApp(const MyApp());
 }
 
-/// The root widget of the application.
-///
-/// This widget sets up the localization delegates, supported locales, and theme.
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -18,11 +224,22 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-/// State for the [MyApp] widget.
-///
-/// Handles the initialization of translations and localization settings.
 class _MyAppState extends State<MyApp> {
-  // ** if you use simple loader
+  // Toggle between Sorani (Arabic script) and Kurmanji (Latin script)
+  Locale _locale = const Locale('ku'); // Default: Sorani
+
+  void _toggleScript() {
+    setState(() {
+      if (_locale.countryCode == null || _locale.countryCode!.isEmpty) {
+        // Switch to Kurmanji (Latin script)
+        _locale = const Locale('ku', 'en');
+      } else {
+        // Switch to Sorani (Arabic script)
+        _locale = const Locale('ku');
+      }
+    });
+  }
+
   Map<String, Map<String, dynamic>> translations = {
     'en': {
       'hello': 'Hello, {name}!',
@@ -39,22 +256,22 @@ class _MyAppState extends State<MyApp> {
         'neutral': "Welcome, {name}."
       },
     },
-    'ar': {
-      'hello': 'مرحبًا، {name}!',
-      'items': {
-        'one': 'عنصر واحد',
-        'two': 'عنصران',
-        'few': '{} عناصر',
-        'many': '{} عنصرًا',
-        'other': '{} عنصر',
-      },
-      "welcome": {
-        'male': "مرحبًا، السيد {name}.",
-        'female': "مرحبًا، السيدة {name}.",
-        'neutral': "مرحبًا، {name}."
-      },
-    },
-    'ku': {
+    // 'ar': {
+    //   'hello': 'مرحبًا، {name}!',
+    //   'items': {
+    //     'one': 'عنصر واحد',
+    //     'two': 'عنصران',
+    //     'few': '{} عناصر',
+    //     'many': '{} عنصرًا',
+    //     'other': '{} عنصر',
+    //   },
+    //   "welcome": {
+    //     'male': "مرحبًا، السيد {name}.",
+    //     'female': "مرحبًا، السيدة {name}.",
+    //     'neutral': "مرحبًا، {name}."
+    //   },
+    // },
+    'ckb': {
       'hello': 'سڵاو، {name}!',
       'items': {
         'zero': 'سفر شەربەت',
@@ -70,119 +287,94 @@ class _MyAppState extends State<MyApp> {
         'neutral': "سڵاو، {name}."
       },
     },
+    'ku': {
+      'hello': 'سلاڤ {name}!',
+      'items': {
+        'zero': 'سفر شەربەت',
+        'one': 'یەک شەربەت',
+        'two': 'دوو شەربەت',
+        'few': '{} شەربەت',
+        'many': '{} شەربەت',
+        'other': '{} شەربەت',
+      },
+      "welcome": {
+        'male': "سڵاو، بەڕێز {name}.",
+      }
+    },
+    'ku_en': {
+      'hello': 'سڵاو، {name}!',
+      'items': {
+        'zero': 'سفر شەربەت',
+        'one': 'یەک شەربەت',
+        'two': 'دوو شەربەت',
+        'few': '{} شەربەت',
+        'many': '{} شەربەت',
+        'other': '{} شەربەت',
+      },
+      "welcome": {
+        'male': "سڵاو، بەڕێز {name}.",
+      }
+    }
   };
   @override
   Widget build(BuildContext context) {
-    // Configure the MaterialApp with localization and theme settings.
     return MaterialApp(
-      title: 'Flutter Demo', // Title of the app
-      theme: ThemeData(
-        // Set the color scheme for the application.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true, // Enable Material 3 design.
-      ),
-      // Define localization delegates for handling translations.
-      localizationsDelegates: [
-        // BestLocalizationDelegate.fromJson(
-        //   JsonAssetLoader(
-        //       path: 'assets/languages',
-        //       useSingleFile: false,
-        //       supportedLocales: ['en', 'ku', 'ar']),
-        // ),
-        BestLocalizationDelegate(
-            translations: translations), // Custom localization delegate.
-        ...kurdishLocalizations, // Kurdish-specific localization.
-        GlobalMaterialLocalizations.delegate, // Material widget localization.
-        GlobalCupertinoLocalizations.delegate, // Cupertino widget localization.
-        GlobalWidgetsLocalizations.delegate, // General widget localization.
-      ],
-      // Define the supported locales for the app.
-      supportedLocales: const [
-        Locale('ku'), // Kurdish
-        Locale('en'), // English
-        Locale('ar'), // Arabic
-      ],
-      // Set the default locale to Kurdish.
-      locale: Locale('ku'),
-      // Define the home screen of the app.
-      home: MyHomePage(
-        title: 'Flutter Demo Home Page',
-      ),
-    );
+        title: 'Kurdish Localization Demo',
+        locale: Locale('ku', 'en'),
+        supportedLocales: const [
+          Locale('ku'), // Kurdish Sorani (Arabic script)
+          Locale('ku', 'en'), // Kurdish Kurmanji (Latin script)
+          Locale('ckb'), // Central Kurdish (if you have it)
+          Locale('en'), // English
+        ],
+        localizationsDelegates: [
+          BestLocalizationDelegate(
+              translations: translations), // Custom localization delegate.
+          ...kurdishLocalizations, // Kurdish-specific localization.
+          GlobalMaterialLocalizations.delegate, // Material widget localization.
+          GlobalCupertinoLocalizations
+              .delegate, // Cupertino widget localization.
+          GlobalWidgetsLocalizations.delegate
+        ],
+        home: Scaffold(
+            appBar: AppBar(
+              title: const Text('Kurdish Locale Test'),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.language),
+                  onPressed: _toggleScript,
+                  tooltip: 'Toggle Script',
+                ),
+              ],
+            ),
+            body: BottomNav()));
   }
 }
 
-/// The main screen of the app.
-///
-/// Displays localized text and a counter.
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  /// The title of the screen, displayed in the app bar.
-  final String title;
+class BottomNav extends StatefulWidget {
+  const BottomNav({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<BottomNav> createState() => _BottomNavState();
 }
 
-/// State for the [MyHomePage] widget.
-///
-/// Manages the counter and displays localized text.
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0; // Counter value displayed on the screen.
-
-  /// Increment the counter and refresh the UI.
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
+class _BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // AppBar with a title.
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title), // Display the title passed from MyHomePage.
-      ),
-      // Main body of the screen.
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // Display a localized greeting for a male user.
-            Text('items').plural(1),
-            Text('items').plural(2),
-            Text('welcome').tr(gender: 'male', args: {'name': 'Dosty'}),
-            Text('welcome').tr(gender: 'neutral', args: {'name': 'Dosty'}),
-            Text(context.translate(
-              'hello',
-              args: {
-                'name': 'Dosty'
-              }, // Pass dynamic arguments for interpolation.
-            )),
-            SizedBox(height: 20), // Add spacing between widgets.
-            // Display a static label.
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            // Display the counter value.
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            CupertinoExpansionTile(
-                title: Text('Cupertino Expansion Tile'),
-                child: Text('Cupertino Expansion Tile Example')),
-          ],
-        ),
-      ),
-      // Floating action button to increment the counter.
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter, // Increment counter when pressed.
-        tooltip: 'Increment', // Tooltip displayed on hover.
-        child: const Icon(Icons.add), // Icon for the button.
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Text(
+            'hello'.tr(context: context, args: {'name': 'Dosty'}),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            context.translate('items', args: {'name': 'Test'}),
+            style: const TextStyle(fontSize: 16),
+          ),
+        ],
       ),
     );
   }

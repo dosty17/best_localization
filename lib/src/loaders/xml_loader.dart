@@ -72,7 +72,7 @@ class XmlAssetLoader extends TranslationLoader {
         );
 
   @override
-  Future<Map<String, Map<String, String>>> load() async {
+  Future<Map<String, Map<String, Object>>> load() async {
     if (useSingleFile) {
       return _loadSingleFile();
     } else {
@@ -81,11 +81,11 @@ class XmlAssetLoader extends TranslationLoader {
   }
 
   /// Loads translations from a single XML file.
-  Future<Map<String, Map<String, String>>> _loadSingleFile() async {
+  Future<Map<String, Map<String, Object>>> _loadSingleFile() async {
     final xmlString = await rootBundle.loadString(path);
     final document = XmlDocument.parse(xmlString);
 
-    final Map<String, Map<String, String>> translations = {};
+    final Map<String, Map<String, Object>> translations = {};
 
     if (format == 'android') {
       // Not typical for single file Android format, but supported
@@ -122,8 +122,8 @@ class XmlAssetLoader extends TranslationLoader {
   }
 
   /// Loads translations from multiple XML files.
-  Future<Map<String, Map<String, String>>> _loadMultipleFiles() async {
-    final Map<String, Map<String, String>> translations = {};
+  Future<Map<String, Map<String, Object>>> _loadMultipleFiles() async {
+    final Map<String, Map<String, Object>> translations = {};
 
     for (final locale in supportedLocales!) {
       try {
@@ -173,10 +173,10 @@ class XmlStringLoader extends TranslationLoader {
   XmlStringLoader(this.xmlString, {this.format = 'custom'});
 
   @override
-  Future<Map<String, Map<String, String>>> load() async {
+  Future<Map<String, Map<String, Object>>> load() async {
     final document = XmlDocument.parse(xmlString);
 
-    final Map<String, Map<String, String>> translations = {};
+    final Map<String, Map<String, Object>> translations = {};
 
     if (format == 'android') {
       final strings = document.findAllElements('string');

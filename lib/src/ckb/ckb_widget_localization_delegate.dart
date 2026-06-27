@@ -4,27 +4,27 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class _KurdishMaterialLocalizationsDelegate
+class _CkbMaterialLocalizationsDelegate
     extends LocalizationsDelegate<WidgetsLocalizations> {
-  const _KurdishMaterialLocalizationsDelegate();
+  const _CkbMaterialLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) => locale.languageCode == 'ku';
+  bool isSupported(Locale locale) => locale.languageCode == 'ckb';
 
   @override
   Future<WidgetsLocalizations> load(Locale locale) async {
     return SynchronousFuture<WidgetsLocalizations>(
-      KurdishWidgetLocalizations(),
+      CkbWidgetLocalizations(),
     );
   }
 
   @override
-  bool shouldReload(_KurdishMaterialLocalizationsDelegate old) => false;
+  bool shouldReload(_CkbMaterialLocalizationsDelegate old) => false;
 }
 
-class KurdishWidgetLocalizations extends WidgetsLocalizations {
+class CkbWidgetLocalizations extends WidgetsLocalizations {
   static const LocalizationsDelegate<WidgetsLocalizations> delegate =
-      _KurdishMaterialLocalizationsDelegate();
+      _CkbMaterialLocalizationsDelegate();
 
   @override
   TextDirection get textDirection => TextDirection.rtl;
@@ -74,4 +74,8 @@ class KurdishWidgetLocalizations extends WidgetsLocalizations {
   @override
   // TODO: implement shareButtonLabel
   String get shareButtonLabel => 'هاوبەشکردن';
+
+  @override
+  // TODO: implement radioButtonUnselectedLabel
+  String get radioButtonUnselectedLabel => 'یەکێک هەڵبژێرە';
 }

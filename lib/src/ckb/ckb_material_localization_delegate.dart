@@ -9,24 +9,24 @@ import 'package:intl/date_symbol_data_custom.dart' as date_symbol_data_custom;
 import 'package:intl/date_symbols.dart' as intl;
 import 'package:intl/intl.dart' as intl;
 
-class _KurdishMaterialLocalizationsDelegate
+class _CkbMaterialLocalizationsDelegate
     extends LocalizationsDelegate<MaterialLocalizations> {
-  const _KurdishMaterialLocalizationsDelegate();
+  const _CkbMaterialLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) => locale.languageCode == 'ku';
+  bool isSupported(Locale locale) => locale.languageCode == 'ckb';
 
   @override
   Future<MaterialLocalizations> load(Locale locale) async {
-    const String localeName = 'ku';
+    const String localeName = 'ckb';
 
     date_symbol_data_custom.initializeDateFormattingCustom(
       locale: localeName,
-      patterns: kuLocaleDatePatterns,
-      symbols: intl.DateSymbols.deserializeFromMap(kuDateSymbols),
+      patterns: ckbLocaleDatePatterns,
+      symbols: intl.DateSymbols.deserializeFromMap(ckbDateSymbols),
     );
     return SynchronousFuture<MaterialLocalizations>(
-      KurdishMaterialLocalizations(
+      CkbMaterialLocalizations(
         fullYearFormat: intl.DateFormat('y', localeName),
         shortDateFormat: intl.DateFormat('MM/DD/YY', localeName),
         compactDateFormat: intl.DateFormat('EEE, MMM d', localeName),
@@ -47,12 +47,12 @@ class _KurdishMaterialLocalizationsDelegate
   }
 
   @override
-  bool shouldReload(_KurdishMaterialLocalizationsDelegate old) => false;
+  bool shouldReload(_CkbMaterialLocalizationsDelegate old) => false;
 }
 
-class KurdishMaterialLocalizations extends GlobalMaterialLocalizations {
-  const KurdishMaterialLocalizations({
-    String localeName = 'ku',
+class CkbMaterialLocalizations extends GlobalMaterialLocalizations {
+  const CkbMaterialLocalizations({
+    String localeName = 'ckb',
     required intl.DateFormat fullYearFormat,
     required intl.DateFormat shortDateFormat,
     required intl.DateFormat compactDateFormat,
@@ -74,7 +74,7 @@ class KurdishMaterialLocalizations extends GlobalMaterialLocalizations {
             decimalFormat: decimalFormat,
             twoDigitZeroPaddedFormat: twoDigitZeroPaddedFormat);
   static const LocalizationsDelegate<MaterialLocalizations> delegate =
-      _KurdishMaterialLocalizationsDelegate();
+      _CkbMaterialLocalizationsDelegate();
 
   @override
   String get aboutListTileTitleRaw => 'دەربارەی \$applicationName';
@@ -397,7 +397,7 @@ class KurdishMaterialLocalizations extends GlobalMaterialLocalizations {
 
   String get keyboardKeyHanjaMode => "Hanja Mode";
 
-  String get keyboardKeyHankaku => "Hankaku";
+  String get keyboardKeyHankackb => "Hankackb";
 
   String get keyboardKeyHiragana => "Hiragana";
 
@@ -513,9 +513,9 @@ class KurdishMaterialLocalizations extends GlobalMaterialLocalizations {
   @override
   String get keyboardKeySpace => "Space";
 
-  String get keyboardKeyZenkaku => "Zenkaku";
+  String get keyboardKeyZenkackb => "Zenkackb";
 
-  String get keyboardKeyZenkakuHankaku => "Zenkaku/Hankaku";
+  String get keyboardKeyZenkackbHankackb => "Zenkackb/Hankackb";
 
   @override
   String get menuBarMenuLabel => "مینیوی";
@@ -575,8 +575,8 @@ class KurdishMaterialLocalizations extends GlobalMaterialLocalizations {
   String get selectedDateLabel => "";
 }
 
-const kuDateSymbols = {
-  'NAME': 'ku',
+const ckbDateSymbols = {
+  'NAME': 'ckb',
   'ERAS': ['پ.ز', 'ز'],
   'ERANAMES': ['پێش زاینی', 'زاینی'],
   'NARROWMONTHS': [
@@ -728,7 +728,7 @@ const kuDateSymbols = {
   'WEEKENDRANGE': [4, 5],
   'FIRSTWEEKCUTOFFDAY': 3
 };
-const kuLocaleDatePatterns = {
+const ckbLocaleDatePatterns = {
   'd': 'd', // DAY
   'E': 'ccc', // ABBR_WEEKDAY
   'EEEE': 'cccc', // WEEKDAY

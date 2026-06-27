@@ -3,7 +3,7 @@ class TranslationVerifier {
   /// Verify translations across multiple locales
   /// Returns a [VerificationReport] containing all issues found
   static VerificationReport verify({
-    required Map<String, Map<String, String>> translations,
+    required Map<String, Map<String, Object>> translations,
     String? referenceLocale,
   }) {
     if (translations.isEmpty) {
@@ -49,7 +49,7 @@ class TranslationVerifier {
       // Find empty values
       final empty = translations[locale]
               ?.entries
-              .where((e) => e.value.trim().isEmpty)
+              .where((e) => e.value.toString().trim().isEmpty)
               .map((e) => e.key)
               .toSet() ??
           {};
@@ -61,7 +61,7 @@ class TranslationVerifier {
     // Check base locale for empty values
     final baseEmpty = translations[baseLocale]
             ?.entries
-            .where((e) => e.value.trim().isEmpty)
+            .where((e) => e.value.toString().trim().isEmpty)
             .map((e) => e.key)
             .toSet() ??
         {};

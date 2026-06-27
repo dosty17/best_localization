@@ -6,7 +6,7 @@
 
 <hr>
 
-**Best Localization** is a lightweight and flexible localization package for Flutter. It supports dynamic translations, interpolation, pluralization, remote translations, fallback locales, and custom localization for the Kurdish language, including widgets like Material and Cupertino.
+**Best Localization** is a lightweight and flexible localization package for Flutter. It supports dynamic translations, interpolation, pluralization, remote translations, fallback locales, and custom localization for Kurdish Sorani and Kurdish Kurmanji, including widgets like Material and Cupertino.
 
 ## Features
 
@@ -21,12 +21,12 @@
 - **Interpolation**: Insert dynamic values into translations (e.g., Hello, {name}!).
 - **BuildContext Extensions**: Easy access to translations without boilerplate code.
 - **Custom Localization for Kurdish**:
-  - Supports Kurdish (ku) localization for Material and Cupertino widgets.
-  - Includes custom date and number formatting.
+  - Supports **Kurdish Sorani** (`ckb`) and **Kurdish Kurmanji** (`ku`) for Material and Cupertino widgets.
+  - Includes custom date and number formatting for each variant.
 - **Seamless Integration**:
   - Works with Flutter's native Localizations system.
   - Fully compatible with MaterialApp and CupertinoApp.
-- **Flexible Translation Loading**: 
+- **Flexible Translation Loading**:
   - Load from assets (JSON, CSV, YAML, XML)
   - Load from remote API (HTTP)
   - Define translations directly in Dart maps
@@ -50,6 +50,7 @@ dependencies:
 ```
 
 **2- Add flutter_localizations** <br> Add the flutter_localizations package to your pubspec.yaml file:
+
 ```yaml
 dependencies:
   flutter_localizations:
@@ -63,21 +64,27 @@ dependencies:
 You can load translations in multiple ways:
 
 **Option A: From a Map (Direct)**
+
 ```dart
 final translations = {
   'en': {
     'hello': 'Hello, {name}!',
     'welcome': 'welcome',
   },
-  'ku': {
+  'ckb': {
     'hello': 'سڵاو، {name}!',
     'welcome': 'بەخێربێیت',
+  },
+  'ku': {
+    'hello': 'Silav, {name}!',
+    'welcome': 'Bi xêr hatî',
   },
   //more language...
 };
 ```
 
 **Option B: From JSON File**
+
 ```json
 // Create assets/translations/translations.json
 {
@@ -85,31 +92,41 @@ final translations = {
     "hello": "Hello, {name}!",
     "welcome": "Welcome"
   },
-  "ku": {
+  "ckb": {
     "hello": "سڵاو، {name}!",
     "welcome": "بەخێربێیت"
+  },
+  "ku": {
+    "hello": "Silav, {name}!",
+    "welcome": "Bi xêr hatî"
   }
 }
 ```
 
 **Option C: From CSV File**
+
 ```csv
-key,en,ku
-hello,Hello,سڵاو
-welcome,Welcome,بەخێربێیت
+key,en,ckb,ku
+hello,Hello,سڵاو,Silav
+welcome,Welcome,بەخێربێیت,Bi xêr hatî
 ```
 
 **Option D: From YAML File**
+
 ```yaml
 en:
   hello: Hello, {name}!
   welcome: Welcome
-ku:
+ckb:
   hello: سڵاو، {name}!
   welcome: بەخێربێیت
+ku:
+  hello: Silav, {name}!
+  welcome: Bi xêr hatî
 ```
 
 **Option E: From XML File**
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <translations>
@@ -117,14 +134,19 @@ ku:
     <string key="hello">Hello, {name}!</string>
     <string key="welcome">Welcome</string>
   </language>
-  <language code="ku">
+  <language code="ckb">
     <string key="hello">سڵاو، {name}!</string>
     <string key="welcome">بەخێربێیت</string>
+  </language>
+  <language code="ku">
+    <string key="hello">Silav, {name}!</string>
+    <string key="welcome">Bi xêr hatî</string>
   </language>
 </translations>
 ```
 
 **Option F: From Remote API**
+
 ```dart
 // Load from your server with automatic caching
 Loaders.remote(
@@ -135,6 +157,7 @@ Loaders.remote(
 ```
 
 **Don't forget to add assets to pubspec.yaml:**
+
 ```yaml
 flutter:
   assets:
@@ -146,6 +169,7 @@ flutter:
 > 📚 **For translation verification**, see [Verification Tool Guide](https://github.com/dosty17/best_localization/blob/main/VERIFICATION.md)
 
 #### 2. Add Localization Delegates
+
 Update your MaterialApp or CupertinoApp to include the localization delegates:
 
 ```dart
@@ -162,54 +186,55 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       localizationsDelegates: [
         // Choose one of the following methods:
-        
+
         // Method 1: Using Loaders class (Recommended)
         BestLocalizationDelegate.fromLoader(
           Loaders.json(path: 'assets/translations.json'),
           fallbackLocale: Locale('en'),
         ),
-        
+
         // Method 2: Using specific factory methods
         // BestLocalizationDelegate.fromJson(
         //   JsonAssetLoader(path: 'assets/translations.json'),
         // ),
-        
+
         // BestLocalizationDelegate.fromCsv(
         //   CsvAssetLoader(path: 'assets/translations.csv'),
         // ),
-        
+
         // BestLocalizationDelegate.fromYaml(
         //   YamlAssetLoader(path: 'assets/translations.yaml'),
         // ),
-        
+
         // BestLocalizationDelegate.fromXml(
         //   XmlAssetLoader(path: 'assets/translations.xml'),
         // ),
-        
+
         // BestLocalizationDelegate.fromHttp(
         //   HttpLoader(url: 'https://api.example.com/translations'),
         // ),
-        
+
         // Method 3: Using a map directly
         // BestLocalizationDelegate.fromMap(
         //   translations,
         //   fallbackLocale: Locale('en'),
         // ),
-        
+
         // Kurdish localizations
         ...kurdishLocalizations,
-        
+
         // Default Flutter localizations
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('ku'), // Kurdish
-        Locale('en'), // English
-        Locale('ar'), // Arabic
+        Locale('ckb'), // Kurdish Sorani
+        Locale('ku'),  // Kurdish Kurmanji
+        Locale('en'),  // English
+        Locale('ar'),  // Arabic
       ],
-      locale: Locale('ku'),
+      locale: Locale('ckb'),
       home: MyHomePage(),
     );
   }
@@ -217,6 +242,7 @@ class MyApp extends StatelessWidget {
 ```
 
 **All available loader methods:**
+
 - `BestLocalizationDelegate.fromMap()` - Direct map
 - `BestLocalizationDelegate.fromJson()` - JSON files
 - `BestLocalizationDelegate.fromCsv()` - CSV files
@@ -225,11 +251,12 @@ class MyApp extends StatelessWidget {
 - `BestLocalizationDelegate.fromHttp()` - Remote API
 - `BestLocalizationDelegate.fromLoader()` - Generic loader (with Loaders class)
 
-
 #### 3. Access Translations
+
 Use the BestLocalization.of(context) method or the convenient extension methods:
 
 **Option A: Using Extension Methods (Recommended)**
+
 ```dart
 class MyHomePage extends StatelessWidget {
   @override
@@ -245,17 +272,17 @@ class MyHomePage extends StatelessWidget {
           children: [
             // Translate text
             Text(context.translate('welcome')),
-            
+
             // Check current language
-            if (context.isKurdish) 
+            if (context.isKurdish)
               Text('Kurdish language detected!'),
-            
+
             // Get text direction automatically
             Text(
               context.translate('some_text'),
               textDirection: context.textDirection,
             ),
-            
+
             // Access current language code
             Text('Current language: ${context.languageCode}'),
           ],
@@ -267,6 +294,7 @@ class MyHomePage extends StatelessWidget {
 ```
 
 **Option B: Using Traditional Method**
+
 ```dart
 class MyHomePage extends StatelessWidget {
   @override
@@ -286,13 +314,16 @@ class MyHomePage extends StatelessWidget {
 ```
 
 **Available Extension Methods:**
+
 - `context.translate('key')` - Translate a key
 - `context.translate('key', args: {...})` - Translate with arguments
 - `context.plural('key', count)` - Translate with plural form
 - `context.localization` - Get BestLocalization instance
 - `context.currentLocale` - Get current locale
-- `context.languageCode` - Get language code ('en', 'ku', etc.)
-- `context.isKurdish` - Check if current language is Kurdish
+- `context.languageCode` - Get language code ('en', 'ckb', 'ku', etc.)
+- `context.isKurdish` - Check if current language is Kurdish (Sorani or Kurmanji)
+- `context.isSorani` - Check if current language is Kurdish Sorani (`ckb`)
+- `context.isKurmanji` - Check if current language is Kurdish Kurmanji (`ku`)
 - `context.isArabic` - Check if current language is Arabic
 - `context.isEnglish` - Check if current language is English
 - `context.isRTL` - Check if current language is RTL
@@ -303,6 +334,7 @@ class MyHomePage extends StatelessWidget {
 Translate strings and Text widgets easily without passing context!
 
 **For Strings:**
+
 ```dart
 // Simple translation - no context needed!
 print('hello'.tr());
@@ -321,6 +353,7 @@ print('hello'.tr(context: context));
 ```
 
 **For Text Widgets:**
+
 ```dart
 // Simple translation - no context needed!
 Text('hello').tr()
@@ -342,6 +375,7 @@ Text('hello').translate()  // Same as .tr()
 ```
 
 **Usage in Your Widget:**
+
 ```dart
 class MyWidget extends StatelessWidget {
   @override
@@ -350,13 +384,13 @@ class MyWidget extends StatelessWidget {
       children: [
         // Direct translation - clean and simple!
         Text('welcome'.tr()),
-        
+
         // With styling
         Text('title').tr(args: {'name': 'User'}),
-        
+
         // Plural form
         Text('items').plural(itemCount),
-        
+
         // Gender-specific
         Text('greeting').tr(gender: userGender),
       ],
@@ -370,6 +404,7 @@ class MyWidget extends StatelessWidget {
 Handle plural forms with language-specific rules:
 
 **JSON Structure:**
+
 ```json
 {
   "day": {
@@ -396,6 +431,7 @@ Handle plural forms with language-specific rules:
 ```
 
 **Usage:**
+
 ```dart
 // String plural
 'day'.plural(0)   // "0 дней"
@@ -416,6 +452,7 @@ Text('money_named_args').plural(balance, args: {'name': userName})
 ```
 
 **Supported Plural Forms:**
+
 - `zero` - When count is 0
 - `one` - When count is 1
 - `two` - When count is 2
@@ -424,6 +461,7 @@ Text('money_named_args').plural(balance, args: {'name': userName})
 - `other` - Default fallback
 
 **Language-Specific Rules:**
+
 - **English**: one (1), other (2+)
 - **Russian/Ukrainian**: Complex rules for one/few/many
 - **Arabic**: Supports zero, one, two, few, many
@@ -434,6 +472,7 @@ Text('money_named_args').plural(balance, args: {'name': userName})
 Support for gender-specific text variations:
 
 **JSON Structure:**
+
 ```json
 {
   "greeting": {
@@ -450,6 +489,7 @@ Support for gender-specific text variations:
 ```
 
 **Usage:**
+
 ```dart
 // String gender translation
 'greeting'.tr(gender: 'male')    // "Hi man ;) "
@@ -469,11 +509,12 @@ Text('welcome_user').tr(gender: userGender, args: {'name': userName})
 ```
 
 **Dynamic Gender Example:**
+
 ```dart
 class UserProfile extends StatelessWidget {
   final String userName;
   final String userGender; // 'male', 'female', or 'other'
-  
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -501,22 +542,24 @@ BestLocalizationDelegate.fromLoader(
 ```
 
 **Example:**
+
 ```json
 {
   "en": {
     "hello": "Hello",
     "new_feature": "New Feature"
   },
-  "ku": {
+  "ckb": {
     "hello": "سڵاو"
     // "new_feature" is missing
   }
 }
 ```
 
-When Kurdish is selected:
+When Kurdish Sorani is selected:
+
 ```dart
-context.translate('hello')       // Returns "سڵاو" (from Kurdish)
+context.translate('hello')       // Returns "سڵاو" (from Kurdish Sorani)
 context.translate('new_feature') // Returns "New Feature" (from fallback English)
 ```
 
@@ -539,6 +582,7 @@ BestLocalizationDelegate.fromLoader(
 ```
 
 **Benefits:**
+
 - ✅ Update translations without app updates
 - ✅ Automatic caching for offline support
 - ✅ Custom cache duration
@@ -551,12 +595,14 @@ BestLocalizationDelegate.fromLoader(
 Verify your translation files to find missing keys, duplicate values, and inconsistencies across locales.
 
 **In Your Code:**
+
 ```dart
 import 'package:best_localization/best_localization.dart';
 
 // Load your translations
 final translations = {
   'en': await JsonAssetLoader(path: 'assets/translations/en.json').load(),
+  'ckb': await JsonAssetLoader(path: 'assets/translations/ckb.json').load(),
   'ku': await JsonAssetLoader(path: 'assets/translations/ku.json').load(),
   'ar': await JsonAssetLoader(path: 'assets/translations/ar.json').load(),
 };
@@ -571,13 +617,15 @@ final report = TranslationVerifier.verify(
 print(report.generateReport());
 
 // Get coverage percentage
-print('Kurdish coverage: ${report.getCoverage('ku')}%');
+print('Sorani coverage: ${report.getCoverage('ckb')}%');
+print('Kurmanji coverage: ${report.getCoverage('ku')}%');
 
 // Export as JSON
 final jsonReport = report.toJson();
 ```
 
 **Command-Line Tool:**
+
 ```bash
 # Activate the package globally (one-time setup)
 flutter pub global activate best_localization
@@ -589,7 +637,7 @@ dart run best_localization:verify_translations verify assets/languages
 dart run best_localization:verify_translations verify assets/languages --reference en
 
 # Compare two translation files
-dart run best_localization:verify_translations compare assets/languages/en.json assets/languages/ku.json
+dart run best_localization:verify_translations compare assets/languages/en.json assets/languages/ckb.json
 
 # Find duplicate values (same translation for different keys)
 dart run best_localization:verify_translations duplicates assets/languages/en.json
@@ -602,20 +650,22 @@ dart run best_localization:verify_translations verify assets/languages --json
 ```
 
 **Verification Report Example:**
+
 ```
 📋 Translation Verification Report
 ══════════════════════════════════════════════════
 Reference Locale: en
 Total Keys: 150
-Locales: en, ku, ar
+Locales: en, ckb, ku, ar
 ══════════════════════════════════════════════════
 
 ❌ Missing Keys:
+  ckb: 3 missing
   ku: 5 missing
     - new_feature
     - settings.advanced
     - error.network_timeout
-    
+
 ⚠️  Empty Values:
   ar: 2 empty
     - placeholder_text
@@ -629,6 +679,7 @@ Summary:
 ```
 
 **Use Cases:**
+
 - ✅ **Pre-release verification**: Check translations before publishing
 - ✅ **CI/CD integration**: Add as automated test in your pipeline
 - ✅ **Translation audit**: Find missing/duplicate translations
@@ -636,22 +687,29 @@ Summary:
 - ✅ **Typo detection**: Find similar keys that might be duplicates
 
 **Available Verification Methods:**
+
 - `TranslationVerifier.verify()` - Verify all locales against reference
 - `TranslationVerifier.compareLocales()` - Compare two specific locales
 - `TranslationVerifier.findDuplicateValues()` - Find duplicate translations
 - `TranslationVerifier.findSimilarKeys()` - Find similar key names (potential typos)
 
 #### 10. Set Keys to Languages Other Than English
+
 You can define your translation keys in languages other than English. For example:
+
 ```dart
 final translations = {
   'en': {
     'سڵاو': 'Hello, {name}!',  // Translation for "سڵاو" in English
     'بەخێربێن': 'Welcome',     // Translation for "بەخێربێن" in English
   },
+  'ckb': {
+    'سڵاو': 'سڵاو، {name}!',  // Translation for "سڵاو" in Kurdish Sorani
+    'بەخێربێن': 'بەخێربێیت',  // Translation for "بەخێربێن" in Kurdish Sorani
+  },
   'ku': {
-    'سڵاو': 'سڵاو، {name}!',  // Translation for "سڵاو" in Kurdish
-    'بەخێربێن': 'بەخێربێیت',  // Translation for "بەخێربێن" in Kurdish
+    'Silav': 'Silav, {name}!',  // Translation for "Silav" in Kurdish Kurmanji
+    'Bi xêr hatî': 'Bi xêr hatî',  // Translation for "Bi xêr hatî" in Kurdish Kurmanji
   },
   // Add more languages here...
 };
@@ -659,12 +717,21 @@ final translations = {
 ```
 
 ## About the developer
-This package was developed by Dosty Pshtiwan, inspired by the flutter_kurdish_localization package created by Amin Samad. It includes Kurdish localization support for Flutter apps and builds upon their foundational work to provide a comprehensive localization solution.
+
+This package was developed by Dosty Pshtiwan, inspired by the flutter_kurdish_localization package created by Amin Samad. It includes Kurdish Sorani (`ckb`) and Kurdish Kurmanji (`ku`) localization support for Flutter apps and builds upon their foundational work to provide a comprehensive localization solution.
+
+### Kurdish language codes
+
+| Variant          | Locale code | Script | Direction |
+| ---------------- | ----------- | ------ | --------- |
+| Kurdish Sorani   | `ckb`       | Arabic | RTL       |
+| Kurdish Kurmanji | `ku`        | Latin  | LTR       |
+
+> **Migration note:** In older versions of this package, Kurdish Sorani used the `ku` code. Sorani is now `ckb`, and `ku` is used for Kurmanji. Update your translation files and `Locale` values accordingly.
 
 <br>
 
 ## Links:
+
 [youtube](https://www.youtube.com/playlist?list=PLwY2YLEPF3yAeT3r_Pdak7DO0PQbvzN_g)\
 [facebook](https://www.facebook.com/dosty.pshtiwan18)
-
-

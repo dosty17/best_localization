@@ -11,7 +11,7 @@ import 'package:intl/intl.dart' as intl;
 /// These are not accurate and are just a clone of the date patterns for the
 /// `no` locale to demonstrate how one would write and use custom date patterns.
 // #docregion Date
-const kurdishLocaleDatePatterns = {
+const ckbLocaleDatePatterns = {
   'd': 'd.',
   'E': 'ccc',
   'EEEE': 'cccc',
@@ -64,8 +64,8 @@ const kurdishLocaleDatePatterns = {
 /// These are not accurate and are just a clone of the date symbols for the
 /// `no` locale to demonstrate how one would write and use custom date symbols.
 // #docregion Date2
-const kuDateSymbols2 = {
-  'NAME': 'ku',
+const ckbDateSymbols2 = {
+  'NAME': 'ckb',
   'ERAS': ['پ.ز', 'ز'],
   'ERANAMES': ['پێش زاینی', 'زاینی'],
   'NARROWMONTHS': [
@@ -219,12 +219,12 @@ const kuDateSymbols2 = {
 };
 
 // #docregion Delegate
-class KurdishCupertinoLocalizationsDelegate
+class CkbCupertinoLocalizationsDelegate
     extends LocalizationsDelegate<CupertinoLocalizations> {
-  const KurdishCupertinoLocalizationsDelegate();
+  const CkbCupertinoLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) => locale.languageCode == 'ku';
+  bool isSupported(Locale locale) => locale.languageCode == 'ckb';
 
   @override
   Future<CupertinoLocalizations> load(Locale locale) async {
@@ -233,13 +233,13 @@ class KurdishCupertinoLocalizationsDelegate
     // date symbols and patterns setup that Flutter uses.
     date_symbol_data_custom.initializeDateFormattingCustom(
       locale: localeName,
-      patterns: kurdishLocaleDatePatterns,
-      symbols: intl.DateSymbols.deserializeFromMap(kuDateSymbols2),
+      patterns: ckbLocaleDatePatterns,
+      symbols: intl.DateSymbols.deserializeFromMap(ckbDateSymbols2),
     );
 
     return SynchronousFuture<CupertinoLocalizations>(
-      KurdishCupertinoLocalizations(
-        weekdayFormat: intl.DateFormat.EEEE('ku'),
+      CkbCupertinoLocalizations(
+        weekdayFormat: intl.DateFormat.EEEE('ckb'),
         localeName: localeName,
         // The `intl` library's NumberFormat class is generated from CLDR data
         // (see https://github.com/dart-lang/intl/blob/master/lib/number_symbols_data.dart).
@@ -264,7 +264,7 @@ class KurdishCupertinoLocalizationsDelegate
   }
 
   @override
-  bool shouldReload(KurdishCupertinoLocalizationsDelegate old) => false;
+  bool shouldReload(CkbCupertinoLocalizationsDelegate old) => false;
 }
 // #enddocregion Delegate
 
@@ -272,9 +272,9 @@ class KurdishCupertinoLocalizationsDelegate
 /// the value for openAppDrawerTooltip was modified to use a custom message as
 /// an example. Everything else uses the American English (en_US) messages
 /// and formatting.
-class KurdishCupertinoLocalizations extends GlobalCupertinoLocalizations {
-  const KurdishCupertinoLocalizations({
-    super.localeName = 'ku',
+class CkbCupertinoLocalizations extends GlobalCupertinoLocalizations {
+  const CkbCupertinoLocalizations({
+    super.localeName = 'ckb',
     required super.fullYearFormat,
     required super.mediumDateFormat,
     required super.decimalFormat,
@@ -315,7 +315,7 @@ class KurdishCupertinoLocalizations extends GlobalCupertinoLocalizations {
   String get selectAllButtonLabel => r'دیاریکردنی هەموو';
 
   static const LocalizationsDelegate<CupertinoLocalizations> delegate =
-      KurdishCupertinoLocalizationsDelegate();
+      CkbCupertinoLocalizationsDelegate();
 
   @override
   String get datePickerDateOrderString => "هەڵبژاردنی بەروار";

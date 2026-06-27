@@ -1,7 +1,10 @@
 import 'package:best_localization/best_localization.dart';
-import 'package:best_localization/src/kurdish/kurdish_cupertino_localization_delegate.dart';
-import 'package:best_localization/src/kurdish/kurdish_material_localization_delegate.dart';
-import 'package:best_localization/src/kurdish/kurdish_widget_localization_delegate.dart';
+import 'package:best_localization/src/ckb/ckb_cupertino_localization_delegate.dart';
+import 'package:best_localization/src/ckb/ckb_material_localization_delegate.dart';
+import 'package:best_localization/src/ckb/ckb_widget_localization_delegate.dart';
+import 'package:best_localization/src/kurdish/kurmanji_cupertino_localization_delegate.dart';
+import 'package:best_localization/src/kurdish/kurmanji_material_localization_delegate.dart';
+import 'package:best_localization/src/kurdish/kurmanji_widget_localization_delegate.dart';
 import 'package:best_localization/src/loaders/translation_loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +63,8 @@ class BestLocalization {
   String translate(String key,
       {Map<String, String>? args, String? gender, Locale? locale}) {
     // Get the current language code (e.g., 'en', 'ku').
-    final languageCode = locale?.languageCode ?? this.locale.languageCode;
+    final languageCode =
+        '${locale?.languageCode ?? this.locale.languageCode}${locale?.countryCode != null || this.locale.countryCode != null ? '_' : ''}${locale?.countryCode ?? this.locale.countryCode ?? ''}';
 
     // Try to get translation from current locale
     dynamic translation = translations[languageCode]?[key];
@@ -114,7 +118,8 @@ class BestLocalization {
   String plural(String key, num count,
       {Map<String, String>? args, Locale? locale}) {
     // Get the current language code (e.g., 'en', 'ku').
-    final languageCode = locale?.languageCode ?? this.locale.languageCode;
+    final languageCode =
+        '${locale?.languageCode ?? this.locale.languageCode}${locale?.countryCode != null || this.locale.countryCode != null ? '_' : ''}${locale?.countryCode ?? this.locale.countryCode ?? ''}';
 
     // Try to get translation from current locale
     dynamic translation = translations[languageCode]?[key];
@@ -404,7 +409,7 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
   /// )
   /// ```
   factory BestLocalizationDelegate.fromMap(
-    Map<String, Map<String, String>> translations, {
+    Map<String, Map<String, Object>> translations, {
     Locale? fallbackLocale,
   }) {
     return BestLocalizationDelegate(
@@ -413,7 +418,7 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
     );
   }
 
-  Map<String, Map<String, String>>? _loadedTranslations;
+  Map<String, Map<String, Object>>? _loadedTranslations;
 
   /// Checks if the given [locale] is supported by this delegate.
   ///
@@ -471,9 +476,12 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
 /// - [KurdishMaterialLocalizations]: Provides Kurdish translations for Material widgets.
 /// - [KurdishWidgetLocalizations]: Provides Kurdish translations for general widgets.
 List<LocalizationsDelegate> get kurdishLocalizations => [
-      KurdishMaterialLocalizations.delegate,
-      KurdishWidgetLocalizations.delegate,
-      KurdishCupertinoLocalizations.delegate,
+      CkbMaterialLocalizations.delegate,
+      CkbWidgetLocalizations.delegate,
+      CkbCupertinoLocalizations.delegate,
+      KurmanjiMaterialLocalizations.delegate,
+      KurmanjiWidgetLocalizations.delegate,
+      KurmanjiCupertinoLocalizations.delegate,
     ];
 
 extension LocalizationExtension on BuildContext {
@@ -515,7 +523,13 @@ extension LocalizationExtension on BuildContext {
   String get languageCode => BestLocalization.of(this).locale.languageCode;
 
   /// Check if current language is Kurdish
-  bool get isKurdish => languageCode == 'ku';
+  bool get isKurdish => languageCode == 'ku' || languageCode == 'ckb';
+
+  /// Check if current language is kurdish Sorani
+  bool get isSorani => languageCode == 'ckb';
+
+  /// Check if current language is kurdish Kurmanji
+  bool get isKurmanji => languageCode == 'ku';
 
   /// Check if current language is Arabic
   bool get isArabic => languageCode == 'ar';
@@ -524,7 +538,8 @@ extension LocalizationExtension on BuildContext {
   bool get isEnglish => languageCode == 'en';
 
   /// Check if current language is RTL (Right-to-Left)
-  bool get isRTL => languageCode == 'ar' || languageCode == 'ku';
+  bool get isRTL =>
+      languageCode == 'ar' || languageCode == 'ku' || languageCode == 'ckb';
 
   /// Get text direction based on current language
   TextDirection get textDirection =>
