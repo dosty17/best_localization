@@ -368,7 +368,7 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<BottomNav> createState() => _BottomNavState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 /// State for the [MyHomePage] widget.
