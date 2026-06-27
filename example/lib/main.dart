@@ -319,46 +319,72 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Kurdish Localization Demo',
-        locale: Locale('ku', 'en'),
-        supportedLocales: const [
-          Locale('ku'), // Kurdish Sorani (Arabic script)
-          Locale('ku', 'en'), // Kurdish Kurmanji (Latin script)
-          Locale('ckb'), // Central Kurdish (if you have it)
-          Locale('en'), // English
-        ],
-        localizationsDelegates: [
-          BestLocalizationDelegate(
-              translations: translations), // Custom localization delegate.
-          ...kurdishLocalizations, // Kurdish-specific localization.
-          GlobalMaterialLocalizations.delegate, // Material widget localization.
-          GlobalCupertinoLocalizations
-              .delegate, // Cupertino widget localization.
-          GlobalWidgetsLocalizations.delegate
-        ],
-        home: Scaffold(
-            appBar: AppBar(
-              title: const Text('Kurdish Locale Test'),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.language),
-                  onPressed: _toggleScript,
-                  tooltip: 'Toggle Script',
-                ),
-              ],
-            ),
-            body: BottomNav()));
+      title: 'Flutter Demo', // Title of the app
+      theme: ThemeData(
+        // Set the color scheme for the application.
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true, // Enable Material 3 design.
+      ),
+      // Define localization delegates for handling translations.
+      localizationsDelegates: [
+        // BestLocalizationDelegate.fromJson(
+        //   JsonAssetLoader(
+        //       path: 'assets/languages',
+        //       useSingleFile: false,
+        //       supportedLocales: ['en', 'ku', 'ar']),
+        // ),
+        BestLocalizationDelegate(
+            translations: translations), // Custom localization delegate.
+        ...kurdishLocalizations, // Kurdish-specific localization.
+        GlobalMaterialLocalizations.delegate, // Material widget localization.
+        GlobalCupertinoLocalizations.delegate, // Cupertino widget localization.
+        GlobalWidgetsLocalizations.delegate, // General widget localization.
+      ],
+      // Define the supported locales for the app.
+      supportedLocales: const [
+        Locale('ku'), // Kurdish
+        Locale('en'), // English
+        Locale('ar'), // Arabic
+      ],
+      // Set the default locale to Kurdish.
+      locale: Locale(
+        'ku',
+      ),
+      // Define the home screen of the app.
+      home: MyHomePage(
+        title: 'Flutter Demo Home Page',
+      ),
+    );
   }
 }
 
-class BottomNav extends StatefulWidget {
-  const BottomNav({super.key});
+/// The main screen of the app.
+///
+/// Displays localized text and a counter.
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  /// The title of the screen, displayed in the app bar.
+  final String title;
 
   @override
   State<BottomNav> createState() => _BottomNavState();
 }
 
-class _BottomNavState extends State<BottomNav> {
+/// State for the [MyHomePage] widget.
+///
+/// Manages the counter and displays localized text.
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0; // Counter value displayed on the screen.
+
+  /// Increment the counter and refresh the UI.
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  DateTime? picked;
   @override
   Widget build(BuildContext context) {
     return Container(

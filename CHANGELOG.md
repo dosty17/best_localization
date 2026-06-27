@@ -2,19 +2,6 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.0.0] - 2026-06-27
-
-### ⚠️ Breaking Changes
-
-- **Kurdish Locale Code Realignment**:
-  - Kurdish Sorani language code changed from `ku` to **`ckb`**.
-  - Kurdish Kurmanji is now officially supported using language code **`ku`**.
-    _Note: If your app previously used `ku` for Sorani, you must rename your translation files (e.g., `ku.json` to `ckb.json`) and update your app's supported locales list to prevent broken layouts or missing translations._
-
-### ✨ New Features
-
-- **Official Kurdish Kurmanji (`ku`) Support**: Added complete localization support including Material and Cupertino widgets.
-
 ## [2.0.0] - 2025-12-22
 
 ### New Features
