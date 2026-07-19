@@ -22,6 +22,7 @@ class BestLocalization {
 
   /// The current locale of the application (e.g., `en`, `ar`, `ku`).
   final Locale locale;
+  final bool isDebug;
 
   /// A map containing translations for all supported languages.
   ///
@@ -44,7 +45,8 @@ class BestLocalization {
   /// [fallbackLocale]: The locale to use when a translation is missing.
   BestLocalization(
     this.locale,
-    this.translations, {
+    this.translations,
+    this.isDebug, {
     this.fallbackLocale,
   });
 
@@ -76,13 +78,18 @@ class BestLocalization {
 
     // If still not found, return key in brackets
     if (translation == null) {
-      return '[$key]';
+      if (isDebug) {
+        return '[$key]';
+      }
+      return key;
     }
 
     // Handle gender-specific translations
     if (gender != null && translation is Map) {
       final genderKey = gender.toLowerCase();
-      translation = translation[genderKey] ?? translation['other'] ?? '[$key]';
+      translation = translation[genderKey] ??
+          translation['other'] ??
+          (isDebug ? '[$key]' : key);
     }
 
     // Convert to string if not already
@@ -131,7 +138,10 @@ class BestLocalization {
 
     // If still not found, return key in brackets
     if (translation == null) {
-      return '[$key]';
+      if (isDebug) {
+        return '[$key]';
+      }
+      return key;
     }
 
     // If translation is not a Map, return it as is
@@ -150,7 +160,8 @@ class BestLocalization {
     }
 
     // Fallback to 'other' if no form found
-    pluralText ??= translation['other']?.toString() ?? '[$key]';
+    pluralText ??=
+        translation['other']?.toString() ?? (isDebug ? '[$key]' : key);
 
     // Replace {} with count
     pluralText = pluralText.replaceAll('{}', count.toString());
@@ -162,7 +173,7 @@ class BestLocalization {
       });
     }
 
-    return pluralText ?? '[$key]';
+    return pluralText ?? (isDebug ? '[$key]' : key);
   }
 
   /// Determines the plural form based on count and language rules.
@@ -265,6 +276,8 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
   /// Example: `Locale('en')`
   final Locale? fallbackLocale;
 
+  final bool isDebug;
+
   /// Creates an instance of [BestLocalizationDelegate].
   ///
   /// Either [translations] or [loader] must be provided.
@@ -276,6 +289,7 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
     this.translations,
     this.loader,
     this.fallbackLocale,
+    this.isDebug = true,
   }) : assert(
           translations != null || loader != null,
           'Either translations or loader must be provided',
@@ -293,11 +307,10 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
   factory BestLocalizationDelegate.fromLoader(
     TranslationLoader loader, {
     Locale? fallbackLocale,
+    bool isDebug = true,
   }) {
     return BestLocalizationDelegate(
-      loader: loader,
-      fallbackLocale: fallbackLocale,
-    );
+        loader: loader, fallbackLocale: fallbackLocale, isDebug: isDebug);
   }
 
   /// Creates a delegate from a CSV loader.
@@ -308,8 +321,10 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
   ///  CsvAssetLoader(path: 'assets/translations.csv'),
   /// )
   /// ```
-  factory BestLocalizationDelegate.fromCsv(CsvAssetLoader loader) {
-    return BestLocalizationDelegate(loader: loader);
+  factory BestLocalizationDelegate.fromCsv(CsvAssetLoader loader,
+      {Locale? fallbackLocale, bool isDebug = true}) {
+    return BestLocalizationDelegate(
+        loader: loader, fallbackLocale: fallbackLocale, isDebug: isDebug);
   }
 
   /// Creates a delegate from a JSON loader.
@@ -359,8 +374,10 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
   /// for more details, see the class documentation.
   /// [more info](https://github.com/dosty17/best_localization/blob/main/loader.md#multiple-files-format)
 
-  factory BestLocalizationDelegate.fromJson(JsonAssetLoader loader) {
-    return BestLocalizationDelegate(loader: loader);
+  factory BestLocalizationDelegate.fromJson(JsonAssetLoader loader,
+      {Locale? fallbackLocale, bool isDebug = true}) {
+    return BestLocalizationDelegate(
+        loader: loader, fallbackLocale: fallbackLocale, isDebug: isDebug);
   }
 
   /// Creates a delegate from an XML loader.
@@ -371,8 +388,10 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
   ///  XmlAssetLoader(path: 'assets/translations.xml'),
   /// )
   /// ```
-  factory BestLocalizationDelegate.fromXml(XmlAssetLoader loader) {
-    return BestLocalizationDelegate(loader: loader);
+  factory BestLocalizationDelegate.fromXml(XmlAssetLoader loader,
+      {Locale? fallbackLocale, bool isDebug = true}) {
+    return BestLocalizationDelegate(
+        loader: loader, fallbackLocale: fallbackLocale, isDebug: isDebug);
   }
 
   /// Creates a delegate from a YAML loader.
@@ -383,8 +402,10 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
   ///  YamlAssetLoader(path: 'assets/translations.yaml'),
   /// )
   /// ```
-  factory BestLocalizationDelegate.fromYaml(YamlAssetLoader loader) {
-    return BestLocalizationDelegate(loader: loader);
+  factory BestLocalizationDelegate.fromYaml(YamlAssetLoader loader,
+      {Locale? fallbackLocale, bool isDebug = true}) {
+    return BestLocalizationDelegate(
+        loader: loader, fallbackLocale: fallbackLocale, isDebug: isDebug);
   }
 
   /// Creates a delegate from an HTTP loader.
@@ -395,8 +416,10 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
   ///  HttpAssetLoader(url: 'https://api.example.com/translations'),
   /// )
   /// ```
-  factory BestLocalizationDelegate.fromHttp(HttpLoader loader) {
-    return BestLocalizationDelegate(loader: loader);
+  factory BestLocalizationDelegate.fromHttp(HttpLoader loader,
+      {Locale? fallbackLocale, bool isDebug = true}) {
+    return BestLocalizationDelegate(
+        loader: loader, fallbackLocale: fallbackLocale, isDebug: isDebug);
   }
 
   /// Creates a delegate from a map of translations.
@@ -411,10 +434,12 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
   factory BestLocalizationDelegate.fromMap(
     Map<String, Map<String, Object>> translations, {
     Locale? fallbackLocale,
+    bool isDebug = true,
   }) {
     return BestLocalizationDelegate(
       translations: translations,
       fallbackLocale: fallbackLocale,
+      isDebug: isDebug,
     );
   }
 
@@ -453,6 +478,7 @@ class BestLocalizationDelegate extends LocalizationsDelegate<BestLocalization> {
     final localization = BestLocalization(
       locale,
       translationsMap,
+      isDebug,
       fallbackLocale: fallbackLocale,
     );
 

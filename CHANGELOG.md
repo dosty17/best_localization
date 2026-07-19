@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 <<<<<<< HEAD
 
+## [3.0.1] - 2026-07-19
+
+### New Features
+
+- Added support for **Debug** and **Production** modes.
+
+### 🔄 Changed
+
+- **Debug Mode:** Missing translation keys are returned wrapped in square brackets (`[missing_key]`) to make them easy to identify during development.
+- **Production Mode:** Missing translation keys are returned as plain text (`missing_key`) without square brackets for a cleaner production experience.
+-
+
 ## [3.0.0] - 2026-06-27
 
 ### ⚠️ Breaking Changes
@@ -13,7 +25,7 @@ All notable changes to this project will be documented in this file.
   - Kurdish Kurmanji is now officially supported using language code **`ku`**.
     _Note: If your app previously used `ku` for Sorani, you must rename your translation files (e.g., `ku.json` to `ckb.json`) and update your app's supported locales list to prevent broken layouts or missing translations._
 
-### ✨ New Features
+### New Features
 
 - # **Official Kurdish Kurmanji (`ku`) Support**: Added complete localization support including Material and Cupertino widgets.
 
