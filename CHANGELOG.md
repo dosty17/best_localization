@@ -61,7 +61,6 @@ All notable changes to this project will be documented in this file.
 #### Fix
 
 - Fix an issue with cupertino
-  > > > > > > > cff1ecbc7b2a2389e189b58d4cce8bac3ed11cf2
 
 ## [2.0.0] - 2025-12-22
 
